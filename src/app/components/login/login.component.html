@@ -1,0 +1,39 @@
+<div class="container">
+    <header>
+        <img class="logo" src="../../../assets/Logo.jpg" alt="Logo">
+        <div class="div-header">
+            <h1 id="main-header">Barbers & Salons Booking</h1>
+            <h3>Make it Simple</h3>
+        </div>
+        <div class="div-empty"> <span> </span></div>
+    </header>
+
+    <div class="form-box">
+            <h2>Faça Log in na Sua Conta</h2>
+            
+        <form (ngSubmit)="logIn(authForm.value)" [formGroup]="authForm">
+            <div class="form-box-fields">
+            <input type="text" placeholder="Email or Username" formControlName="username">
+            <input type="password" placeholder="Password" formControlName="password">
+            <button type="submit">Log In</button>
+
+            <div class="form-box-isLogin">
+                <label>Manter-me logado no Sistema?<input type="checkbox" formControlName="logged"></label>
+                <a href="url">Recuperar palavra-passe</a>
+            </div>
+            <label>Or Log In with</label>
+            <button type="submit">Log In with Google</button>
+        </div>
+    </form>
+    </div>
+
+    <div class="footer">
+        <li>
+            <ul><a href="url">Term of Use</a> </ul>
+            <ul><a href="url">Help</a> </ul>
+            <ul><a href="url">Privacy Policy</a> </ul>
+        </li>
+    </div>   
+</div>
+
+

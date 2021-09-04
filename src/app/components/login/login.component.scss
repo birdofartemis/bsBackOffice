@@ -1,0 +1,85 @@
+//make an object to heritage
+
+.container {
+  background-image: url("../../../assets/Login-Background.jpg");
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.push {
+  margin-left: auto;
+}
+header {
+  display: flex;
+  width: 100%;
+  height: auto;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2em;
+
+  .div-header {
+    color: #fff;
+    text-align: center;
+  }
+}
+.form-box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+  text-align: center;
+  justify-content: space-between;
+
+  .form-box-fields {
+    margin-left: 5em;
+    margin-right: 5em;
+    margin-bottom: 2em;
+    display: flex;
+    flex-direction: column;
+
+    input {
+      margin: 1em;
+      height: 2em;
+      vertical-align: -0.6em;
+      position: relative;
+    }
+
+    button {
+      display: flex;
+      width: 94%;
+      margin: 1em;
+      justify-content: center;
+      align-items: center;
+      height: 2em;
+    }
+
+    .form-box-isLogin {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: -1em;
+    }
+  }
+}
+.footer {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+
+  li {
+    display: flex;
+  }
+  a {
+    text-decoration: none;
+    color: #fff;
+  }
+
+  a:hover {
+    color: blue;
+  }
+}
