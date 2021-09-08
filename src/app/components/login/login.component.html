@@ -8,24 +8,41 @@
         <div class="div-empty"> <span> </span></div>
     </header>
 
-    <div class="form-box">
-            <h2>Faça Log in na Sua Conta</h2>
-            
-        <form (ngSubmit)="logIn(authForm.value)" [formGroup]="authForm">
-            <div class="form-box-fields">
-            <input type="text" placeholder="Email or Username" formControlName="username">
-            <input type="password" placeholder="Password" formControlName="password">
-            <button type="submit">Log In</button>
+    <mat-card>
+        <mat-card-title>Faça Log In na Sua Conta</mat-card-title>
+        <mat-card-content>
+            <form [formGroup]="authForm">
+                <mat-form-field>
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" required formControlName="username" />
+                    <mat-error *ngIf="authForm?.get('username')?.errors?.required">Field is required</mat-error>
+                </mat-form-field>
 
-            <div class="form-box-isLogin">
-                <label>Manter-me logado no Sistema?<input type="checkbox" formControlName="logged"></label>
-                <a href="url">Recuperar palavra-passe</a>
-            </div>
-            <label>Or Log In with</label>
-            <button type="submit">Log In with Google</button>
-        </div>
-    </form>
-    </div>
+                <mat-form-field>
+                    <mat-label>Password</mat-label>
+                    <input matInput [type]="hide ? 'password' : 'text'" required formControlName="password" />
+                    <mat-error>Field is required</mat-error>
+                    <button mat-icon-button matSuffix (click)="hide = !hide" 
+                    [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon> {{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                </mat-form-field>
+                
+                <div class="checkbox-logged">
+                    <mat-label>Manter-me logado no Sistema  </mat-label>
+                    <mat-checkbox color="primary" formControlName="logged"></mat-checkbox>
+                    <a (click)="recoverPassword($event, authForm?.get('email')?.value)">Recuperar palavra-passe </a>
+                </div>
+            </form>
+        </mat-card-content>
+
+        <mat-card-actions>
+            <button mat-flat-button type="button" color="primary" [disabled]="authForm.invalid" (click)="logIn($event, authForm.value)"> Log In </button>
+        </mat-card-actions>
+
+        <mat-card-footer>
+            Quer criar uma conta para o seu salão? <a>Sign-In</a> </mat-card-footer>
+    </mat-card>
 
     <div class="footer">
         <li>

@@ -26,50 +26,50 @@ header {
     text-align: center;
   }
 }
-.form-box {
-  position: relative;
+
+mat-card-title {
+  text-align: center;
+}
+
+form {
   display: flex;
   flex-direction: column;
+
+  a {
+    margin-left: 1rem;
+    color: blue;
+    cursor: pointer;
+  }
+
+  mat-form-field {
+    margin: 1rem;
+  }
+}
+
+mat-card-actions {
+  display: flex;
+  align-items: center;
   justify-content: center;
-  background-color: white;
+
+  button {
+    width: 100%;
+    padding: auto;
+    margin: auto;
+  }
+}
+
+mat-card-footer {
   text-align: center;
-  justify-content: space-between;
+  color: rgba(128, 128, 128, 0.993);
+  margin-bottom: 0rem;
 
-  .form-box-fields {
-    margin-left: 5em;
-    margin-right: 5em;
-    margin-bottom: 2em;
-    display: flex;
-    flex-direction: column;
-
-    input {
-      margin: 1em;
-      height: 2em;
-      vertical-align: -0.6em;
-      position: relative;
-    }
-
-    button {
-      display: flex;
-      width: 94%;
-      margin: 1em;
-      justify-content: center;
-      align-items: center;
-      height: 2em;
-    }
-
-    .form-box-isLogin {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: -1em;
-    }
+  a {
+    color: blue;
   }
 }
 .footer {
   display: flex;
-  flex-direction: row;
-  margin-bottom: 15px;
+  justify-content: space-between;
 
   li {
     display: flex;
@@ -80,6 +80,6 @@ header {
   }
 
   a:hover {
-    color: blue;
+    color: rgba(233, 233, 248, 0.301);
   }
 }
