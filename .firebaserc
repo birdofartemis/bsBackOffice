@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "bsproject-de69f": {
+      "hosting": {
+        "bsBackoffice": [
+          "bsproject-de69f"
+        ]
+      }
+    }
+  }
+}

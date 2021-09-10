@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { RecoverPasswordComponent } from '../recover-password/recover-password.component';
+import { AuthServiceService } from 'src/app/services/auth-service.service';
+
 
 
 export interface Auth {
@@ -22,7 +24,7 @@ export class LoginComponent implements OnInit {
   hide: boolean;
   
 
-  constructor(private fb: FormBuilder, public dialog: MatDialog) {
+  constructor(private fb: FormBuilder, public dialog: MatDialog, private authService: AuthServiceService ) {
     this.hide = true;
     this.authForm = this.fb.group({
       username: ['', [Validators.required, Validators.email]], 
@@ -35,7 +37,7 @@ export class LoginComponent implements OnInit {
 
   logIn(event: Event, value: Auth): void {
     event.stopPropagation();
-    console.log(value);
+    this.authService.logInAuth(value.username, value.password);
   }
 
   recoverPassword(event: Event, email: string) {

@@ -14,6 +14,9 @@ import { MatButtonModule } from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { RecoverPasswordComponent } from './components/recover-password/recover-password.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { environment } from 'src/environments/environment';
+import { AuthServiceService } from './services/auth-service.service';
+import { AngularFireModule } from '@angular/fire/compat';
 
 
 @NgModule({
@@ -34,9 +37,12 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatIconModule,
     MatButtonModule,
     MatCheckboxModule,
-    MatDialogModule
+    MatDialogModule,
+    AngularFireModule.initializeApp(environment.firebase)
   ],
-  providers: [],
+  providers: [AuthServiceService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+   
+}
