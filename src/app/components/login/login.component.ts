@@ -45,14 +45,14 @@ export class LoginComponent implements OnInit {
     this.openDialog(email);
   }
 
-  openDialog(email:string): void {
+  private openDialog(email:string): void {
     const dialofRef = this.dialog.open(RecoverPasswordComponent, {
       data: email,
     });
 
     dialofRef.afterClosed().subscribe((email: string) => {
       if(email) {
-        console.log(email);
+        this.authService.resetPassword(email);
       }
     })
   }
