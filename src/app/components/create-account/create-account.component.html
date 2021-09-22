@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Create Account</h1>
+<div mat-card-content>
+    <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput [formControl]="email" required />
+        <mat-label>Passoword</mat-label>
+        <input matInput [formControl]="password" required placeholder="Min 6 caracteres" />
+      </mat-form-field>
+</div>
+<!-- Not sure if can call two times mat-dialog-close. -->
+<div mat-dialog-actions>
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button
+    mat-button
+    [mat-dialog-close]="email.value"
+    [mat-dialog-close]="password.value" 
+    cdkFocisInitial
+    [disabled]="email.invalid">
+    Send Email
+    </button>
+</div>

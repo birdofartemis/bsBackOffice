@@ -37,8 +37,12 @@ form {
 
   a {
     margin-left: 1rem;
-    color: blue;
+    color: #1f8db0;
     cursor: pointer;
+  }
+
+  a:hover {
+    text-decoration: underline;
   }
 
   mat-form-field {
@@ -64,7 +68,7 @@ mat-card-footer {
   margin-bottom: 0rem;
 
   a {
-    color: blue;
+    color: #1f8db0;
   }
 }
 .footer {

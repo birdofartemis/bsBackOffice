@@ -18,6 +18,7 @@ import { environment } from 'src/environments/environment';
 import { AuthServiceService } from './services/auth-service.service';
 import { AngularFireModule } from '@angular/fire/compat';
 import { SignInComponent } from './components/sign-in/sign-in.component';
+import { CreateAccountComponent } from './components/create-account/create-account.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
     AppComponent,
     LoginComponent,
     RecoverPasswordComponent,
-    SignInComponent
+    SignInComponent,
+    CreateAccountComponent
   ],
   imports: [
     BrowserModule,
