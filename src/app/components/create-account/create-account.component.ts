@@ -1,6 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthServiceService } from 'src/app/services/auth-service.service';
 
 @Component({
   selector: 'app-create-account',
@@ -9,16 +9,22 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class CreateAccountComponent {
 
-  email: FormControl;
-  password: FormControl;
+  signForm : FormGroup;
+  hide : boolean;
 
-  constructor(public dialofRef: MatDialogRef<CreateAccountComponent>, @Inject(MAT_DIALOG_DATA) public userData?: {email: string, password: string}) { 
-    this.email = new FormControl('', [Validators.required, Validators.email]);
-    this.password = new FormControl('', [Validators.required, Validators.minLength(6)]);
+  constructor(private fb: FormBuilder, private authService: AuthServiceService) { 
+    this.hide = true;
+    this.signForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]], 
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      enterprise: ['', Validators.required],
+      postalCode: ['', Validators.required],
+      phoneNumber: ['', Validators.required],
+      name: ['', Validators.required]
+    });
    }
 
-  onCancel(): void {
-    this.dialofRef.close();
-  }
-
+   signIn(email: string, password: string){
+     this.authService.signUp(email, password);
+   }
 }

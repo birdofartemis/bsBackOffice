@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { RecoverPasswordComponent } from '../recover-password/recover-password.component';
 import { AuthServiceService } from 'src/app/services/auth-service.service';
 
-
+import { RecoverPasswordComponent } from '../recover-password/recover-password.component';
 
 export interface Auth {
   username: string;

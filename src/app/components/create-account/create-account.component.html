@@ -1,21 +1,75 @@
-<h1 mat-dialog-title>Create Account</h1>
-<div mat-card-content>
-    <mat-form-field appearance="fill">
-        <mat-label>Email</mat-label>
-        <input matInput [formControl]="email" required />
-        <mat-label>Passoword</mat-label>
-        <input matInput [formControl]="password" required placeholder="Min 6 caracteres" />
-      </mat-form-field>
-</div>
-<!-- Not sure if can call two times mat-dialog-close. -->
-<div mat-dialog-actions>
-    <button mat-button (click)="onCancel()">Cancel</button>
-    <button
-    mat-button
-    [mat-dialog-close]="email.value"
-    [mat-dialog-close]="password.value" 
-    cdkFocisInitial
-    [disabled]="email.invalid">
-    Send Email
-    </button>
+<div class="container">
+
+    <div class="left-container">
+        <h1>B&S Booking</h1>
+    </div>
+
+    <div class = "right-container">
+        <mat-card>
+            <mat-card-title>Create Account</mat-card-title>
+
+            <mat-card-content>
+                <form [formGroup]="signForm">
+
+                    <div class="form-email">
+                        <mat-form-field>
+                            <mat-label>Email</mat-label>
+                            <input matInput type="email" required formControlName="email" />
+                            <mat-error *ngIf="signForm?.get('email')?.errors?.required">Field is required</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-name">
+                        <mat-form-field>
+                            <mat-label>Nome Completo</mat-label>
+                            <input matInput type="text" required formControlName="name" />
+                            <mat-error *ngIf="signForm?.get('name')?.errors?.required">Field is required</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-enterprise">
+
+                        <mat-form-field>
+                            <mat-label>Nome da Empresa</mat-label>
+                            <input matInput type="text" required formControlName="enterprise" />
+                            <mat-error *ngIf="signForm?.get('name')?.errors?.required">Field is required</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-enterprise-data">
+                        <mat-form-field>
+                            <mat-label>Telefone</mat-label>
+                            <input matInput type="number" required formControlName="phoneNumber" />
+                            <mat-error *ngIf="signForm?.get('phoneNumber')?.errors?.required">Field is required</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-label>Código Postal</mat-label>
+                            <input matInput type="text" required formControlName="postalCode" />
+                            <mat-error *ngIf="signForm?.get('postalCode')?.errors?.required">Field is required</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-password"></div>
+                        <mat-form-field>
+                            <mat-label>Password</mat-label>
+                            <input matInput [type]="hide ? 'password' : 'text'" required formControlName="password" />
+                            <mat-error>Must have min of 6 charac</mat-error>
+                            <button mat-icon-button matSuffix (click)="hide = !hide" 
+                            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                            <mat-icon> {{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                            </button>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-label>Repeat Password</mat-label>
+                            <input matInput [type]="hide ? 'password' : 'text'" required />
+                            <mat-error>Must have min of 6 charac</mat-error>
+                        </mat-form-field>
+                </form>
+            </mat-card-content>
+
+        </mat-card>
+    </div>
+
 </div>

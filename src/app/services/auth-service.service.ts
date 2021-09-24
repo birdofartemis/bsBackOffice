@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth'
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 
 
@@ -21,6 +21,9 @@ export class AuthServiceService {
     this.auth.useDeviceLanguage();
 
     this.auth.sendPasswordResetEmail(email).then( () => console.log('Email sent with sucess')).catch(error => console.error(error));
+  }
 
+  signUp(email:string, password: string) {
+    this.auth.createUserWithEmailAndPassword(email, password);
   }
 }
