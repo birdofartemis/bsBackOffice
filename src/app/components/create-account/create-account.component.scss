@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  height: 100%;
+}
+
+.left-container {
+  width: 50%;
+  height: auto;
+  display: flex;
+  background-color: #1f8db0;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  h1 {
+    font-size: 3rem;
+  }
+}
+
+.right-container {
+  width: 50%;
+  height: 100%;
+  mat-card {
+    height: 94.6%;
+    mat-form-field {
+      margin: 0.7rem;
+    }
+  }
+}

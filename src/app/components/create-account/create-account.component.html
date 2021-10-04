@@ -1,0 +1,85 @@
+<div class="container">
+
+    <div class="left-container">
+        <h1>B&S Booking</h1>
+    </div>
+
+    <div class = "right-container">
+        <mat-card>
+            <mat-card-title>Create Account</mat-card-title>
+
+            <mat-card-content>
+                <form [formGroup]="signForm">
+
+                    <div class="form-email">
+                        <mat-form-field>
+                            <mat-label>Email</mat-label>
+                            <input matInput type="email" required formControlName="email" />
+                            <mat-error *ngIf="signForm?.get('email')?.errors?.required">Field is required</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-name">
+                        <mat-form-field>
+                            <mat-label>Nome Completo</mat-label>
+                            <input matInput type="text" required formControlName="name" />
+                            <mat-error *ngIf="signForm?.get('name')?.errors?.required">Field is required</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-enterprise">
+
+                        <mat-form-field>
+                            <mat-label>Nome da Empresa</mat-label>
+                            <input matInput type="text" required formControlName="enterprise" />
+                            <mat-error *ngIf="signForm?.get('name')?.errors?.required">Field is required</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-enterprise-data">
+                        <mat-form-field>
+                            <mat-label>Telefone</mat-label>
+                            <input matInput type="number" required formControlName="phoneNumber" />
+                            <mat-error *ngIf="signForm?.get('phoneNumber')?.errors?.required">Field is required</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-label>Código Postal</mat-label>
+                            <input matInput type="text" required formControlName="postalCode" />
+                            <mat-error *ngIf="signForm?.get('postalCode')?.errors?.required">Field is required</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-password">
+                        <mat-form-field>
+                            <mat-label>Password</mat-label>
+                            <input matInput [type]="hide ? 'password' : 'text'" required formControlName="password" />
+                            <mat-error>Must have min of 6 charac</mat-error>
+                            <button mat-icon-button matSuffix (click)="hide = !hide" 
+                            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                            <mat-icon> {{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                            </button>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-label>Repeat Password</mat-label>
+                            <input matInput formControlName="passwordConfirmation" [type]="hide ? 'password' : 'text'" required />
+                            <mat-error>Must have min of 6 charac</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="checkbox-terms-conditions">
+                        <mat-label><a (click)="showTerms($event)">Termos e Privacidade </a>  </mat-label>
+                        <mat-checkbox color="primary" formControlName="termsConditions"></mat-checkbox>
+                        
+                    </div>
+                </form>
+            </mat-card-content>
+
+            <mat-card-actions>
+                <button mat-flat-button type="button" color="primary" [disabled]="signForm.invalid" (click)="signIn(signForm?.value )"> Criar Conta </button>
+            </mat-card-actions>
+
+        </mat-card>
+    </div>
+
+</div>

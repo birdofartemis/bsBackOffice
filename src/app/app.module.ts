@@ -1,23 +1,26 @@
 import { NgModule } from '@angular/core';
+import { AngularFireModule } from '@angular/fire/compat';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { environment } from 'src/environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CreateAccountComponent } from './components/create-account/create-account.component';
 import { LoginComponent } from './components/login/login.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatCardModule} from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import {MatIconModule} from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import {MatCheckboxModule} from '@angular/material/checkbox';
 import { RecoverPasswordComponent } from './components/recover-password/recover-password.component';
-import { MatDialogModule } from '@angular/material/dialog';
-import { environment } from 'src/environments/environment';
-import { AuthServiceService } from './services/auth-service.service';
-import { AngularFireModule } from '@angular/fire/compat';
 import { SignInComponent } from './components/sign-in/sign-in.component';
+import { AuthServiceService } from './services/auth-service.service';
+import { FirestoreService } from './services/firestore.service';
 
 
 @NgModule({
@@ -25,7 +28,8 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
     AppComponent,
     LoginComponent,
     RecoverPasswordComponent,
-    SignInComponent
+    SignInComponent,
+    CreateAccountComponent
   ],
   imports: [
     BrowserModule,
@@ -39,10 +43,11 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
     MatIconModule,
     MatButtonModule,
     MatCheckboxModule,
+    MatSnackBarModule,
     MatDialogModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
-  providers: [AuthServiceService],
+  providers: [AuthServiceService, FirestoreService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
