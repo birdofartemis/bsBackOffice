@@ -1,5 +1,3 @@
-//make an object to heritage
-
 .container {
   background-image: url("../../../assets/Login-Background.jpg");
   width: 100%;
@@ -10,18 +8,22 @@
   justify-content: space-between;
 }
 
-.push {
-  margin-left: auto;
-}
 header {
   display: flex;
   width: 100%;
   height: auto;
   align-items: center;
   justify-content: space-between;
-  margin-top: 2em;
+  margin-top: 1rem;
 
+  img {
+    width: 10rem;
+    height: 10rem;
+    margin: 1rem;
+  }
   .div-header {
+    position: absolute;
+    width: 100%;
     color: #fff;
     text-align: center;
   }
@@ -51,9 +53,9 @@ form {
 }
 
 mat-card-actions {
-  display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
 
   button {
     width: 100%;
@@ -69,14 +71,23 @@ mat-card-footer {
 
   a {
     color: #1f8db0;
+    cursor: pointer;
+  }
+
+  a:hover {
+    text-decoration: underline;
   }
 }
 .footer {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 1rem;
 
-  li {
+  ul {
     display: flex;
+    li {
+      margin-right: 1.5rem;
+    }
   }
   a {
     text-decoration: none;

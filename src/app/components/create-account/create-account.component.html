@@ -50,7 +50,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="form-password"></div>
+                    <div class="form-password">
                         <mat-form-field>
                             <mat-label>Password</mat-label>
                             <input matInput [type]="hide ? 'password' : 'text'" required formControlName="password" />
@@ -63,11 +63,21 @@
 
                         <mat-form-field>
                             <mat-label>Repeat Password</mat-label>
-                            <input matInput [type]="hide ? 'password' : 'text'" required />
+                            <input matInput formControlName="passwordConfirmation" [type]="hide ? 'password' : 'text'" required />
                             <mat-error>Must have min of 6 charac</mat-error>
                         </mat-form-field>
+                    </div>
+                    <div class="checkbox-terms-conditions">
+                        <mat-label><a (click)="showTerms($event)">Termos e Privacidade </a>  </mat-label>
+                        <mat-checkbox color="primary" formControlName="termsConditions"></mat-checkbox>
+                        
+                    </div>
                 </form>
             </mat-card-content>
+
+            <mat-card-actions>
+                <button mat-flat-button type="button" color="primary" [disabled]="signForm.invalid" (click)="signIn(signForm?.value )"> Criar Conta </button>
+            </mat-card-actions>
 
         </mat-card>
     </div>

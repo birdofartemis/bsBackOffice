@@ -3,9 +3,9 @@
         <img class="logo" src="../../../assets/Logo.jpg" alt="Logo">
         <div class="div-header">
             <h1 id="main-header">Barbers & Salons Booking</h1>
+            <br>
             <h3>Make it Simple</h3>
         </div>
-        <div class="div-empty"> <span> </span></div>
     </header>
 
     <mat-card>
@@ -29,7 +29,7 @@
                 </mat-form-field>
                 
                 <div class="checkbox-logged">
-                    <mat-label>Manter-me logado no Sistema  </mat-label>
+                    <mat-label>Manter-me logado no Sistema </mat-label>
                     <mat-checkbox color="primary" formControlName="logged"></mat-checkbox>
                     <a (click)="recoverPassword($event, authForm?.get('email')?.value)">Recuperar palavra-passe </a>
                 </div>
@@ -39,17 +39,19 @@
         <mat-card-actions>
             <button mat-flat-button type="button" color="primary" [disabled]="authForm.invalid" (click)="logIn($event, authForm.value)"> Log In </button>
         </mat-card-actions>
+        
 
         <mat-card-footer>
-            Quer criar uma conta para o seu salão? <a>Sign-In</a> </mat-card-footer>
+            Quer criar uma conta para o seu salão? <a routerLink="/signin" routerLinkActive="active">Sign-In</a> 
+        </mat-card-footer>
     </mat-card>
 
     <div class="footer">
-        <li>
-            <ul><a href="url">Term of Use</a> </ul>
-            <ul><a href="url">Help</a> </ul>
-            <ul><a href="url">Privacy Policy</a> </ul>
-        </li>
+        <ul>
+            <li><a href="url">Term of Use</a> </li>
+            <li><a href="url">Help</a> </li>
+            <li><a href="url">Privacy Policy</a> </li>
+        </ul>
     </div>   
 </div>
 
