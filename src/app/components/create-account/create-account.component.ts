@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { AuthServiceService } from 'src/app/services/auth-service.service';
-import { FirestoreService } from 'src/app/services/firestore.service';
-import { User } from 'src/app/shared/model/user.model';
+import { LoadingService } from 'src/app/shared/services/loading/loading.service';
+
+import { AuthServiceService } from '../../services/auth-service.service';
+import { FirestoreService } from '../../services/firestore.service';
+import { User } from '../../shared/model/user.model';
 
 @Component({
   selector: 'app-create-account',
@@ -16,7 +18,7 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
   signForm : FormGroup;
   hide : boolean;
 
-  constructor(private fb: FormBuilder, private authService: AuthServiceService, private db: FirestoreService) { 
+  constructor(private fb: FormBuilder, private authService: AuthServiceService, private db: FirestoreService, private loadingService: LoadingService) { 
     this.hide = true;
     this.subscription = new Subscription();
     this.signForm = this.fb.group({
@@ -38,7 +40,16 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
    }
 
    signIn(user: User): void {
-     this.authService.signUp(user).subscribe();
+     this.loadingService.updateLoading(true);
+     this.authService.signUp(user).subscribe(
+       //Sucess
+       () => {
+       this.loadingService.updateLoading(false)
+        }, 
+      //Error
+      () => {
+      this.loadingService.updateLoading(false)
+     });
    }
 
    validatePassword(): ValidatorFn {

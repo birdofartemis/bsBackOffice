@@ -8,6 +8,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -21,7 +22,7 @@ import { RecoverPasswordComponent } from './components/recover-password/recover-
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { AuthServiceService } from './services/auth-service.service';
 import { FirestoreService } from './services/firestore.service';
-
+import { LoadingService } from './shared/services/loading/loading.service';
 
 @NgModule({
   declarations: [
@@ -44,10 +45,11 @@ import { FirestoreService } from './services/firestore.service';
     MatButtonModule,
     MatCheckboxModule,
     MatSnackBarModule,
+    MatProgressBarModule,
     MatDialogModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
-  providers: [AuthServiceService, FirestoreService],
+  providers: [AuthServiceService, FirestoreService, LoadingService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
