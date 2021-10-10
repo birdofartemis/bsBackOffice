@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { AuthServiceService } from 'src/app/services/auth-service.service';
+import { RoutingService } from 'src/app/services/routing.service';
+import { LoadingService } from 'src/app/shared/services/loading/loading.service';
 
 import { RecoverPasswordComponent } from '../recover-password/recover-password.component';
 
@@ -23,7 +25,7 @@ export class LoginComponent implements OnDestroy {
   authForm: FormGroup;
   hide: boolean;
   
-  constructor(private fb: FormBuilder, public dialog: MatDialog, private authService: AuthServiceService, private _snackBar: MatSnackBar) {
+  constructor(private fb: FormBuilder, public dialog: MatDialog, private authService: AuthServiceService, private _snackBar: MatSnackBar, private loadingService: LoadingService, private routeService: RoutingService) {
     this.hide = true;
     this.subscription = new Subscription();
     
@@ -35,14 +37,19 @@ export class LoginComponent implements OnDestroy {
 
   logIn(event: Event, value: Auth) : void {
     event.stopPropagation();
+    this.loadingService.updateLoading(true);
     this.subscription.add(
       this.authService.logInAuth(value.username, value.password)
       .subscribe(
       // Success
-      () => {}, 
+      () => {
+         this.loadingService.updateLoading(false);
+         this.routeService.navigate('home');
+        }, 
       // Error
       () => {
-        this._snackBar.open('Utilizador ou password incorretos', 'Close') })
+        this.loadingService.updateLoading(false);
+        this._snackBar.open('Utilizador ou password incorretos', 'Fechar') })
       );       
   }
 
