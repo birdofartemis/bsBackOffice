@@ -1,3 +1,4 @@
+import { LayoutModule } from '@angular/cdk/layout';
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire/compat';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -8,8 +9,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { environment } from 'src/environments/environment';
@@ -20,8 +24,10 @@ import { CreateAccountComponent } from './components/create-account/create-accou
 import { LoginComponent } from './components/login/login.component';
 import { RecoverPasswordComponent } from './components/recover-password/recover-password.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
+import { MainModule } from './main/main.module';
 import { AuthServiceService } from './services/auth-service.service';
 import { FirestoreService } from './services/firestore.service';
+import { RoutingService } from './services/routing.service';
 import { LoadingService } from './shared/services/loading/loading.service';
 
 @NgModule({
@@ -47,9 +53,14 @@ import { LoadingService } from './shared/services/loading/loading.service';
     MatSnackBarModule,
     MatProgressBarModule,
     MatDialogModule,
-    AngularFireModule.initializeApp(environment.firebase)
+    AngularFireModule.initializeApp(environment.firebase),
+    LayoutModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
+    MainModule
   ],
-  providers: [AuthServiceService, FirestoreService, LoadingService],
+  providers: [AuthServiceService, FirestoreService, LoadingService, RoutingService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

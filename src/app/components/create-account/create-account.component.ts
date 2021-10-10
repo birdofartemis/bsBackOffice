@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
+import { RoutingService } from 'src/app/services/routing.service';
 import { LoadingService } from 'src/app/shared/services/loading/loading.service';
 
 import { AuthServiceService } from '../../services/auth-service.service';
@@ -18,7 +20,7 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
   signForm : FormGroup;
   hide : boolean;
 
-  constructor(private fb: FormBuilder, private authService: AuthServiceService, private db: FirestoreService, private loadingService: LoadingService) { 
+  constructor(private fb: FormBuilder, private authService: AuthServiceService, private db: FirestoreService, private loadingService: LoadingService, private _snackBar: MatSnackBar, private routeService: RoutingService) { 
     this.hide = true;
     this.subscription = new Subscription();
     this.signForm = this.fb.group({
@@ -44,11 +46,13 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
      this.authService.signUp(user).subscribe(
        //Sucess
        () => {
-       this.loadingService.updateLoading(false)
+        this.routeService.navigate('home');
+        this.loadingService.updateLoading(false);
         }, 
       //Error
       () => {
-      this.loadingService.updateLoading(false)
+        this.loadingService.updateLoading(false);
+        this._snackBar.open('Email incorreto ou já usado anteriormente', 'Fechar');
      });
    }
 
