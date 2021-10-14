@@ -7,9 +7,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -24,7 +26,7 @@ import { CreateAccountComponent } from './components/create-account/create-accou
 import { LoginComponent } from './components/login/login.component';
 import { RecoverPasswordComponent } from './components/recover-password/recover-password.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
-import { MainModule } from './main/main.module';
+import { MenuComponent } from './main/menu/menu.component';
 import { AuthServiceService } from './services/auth-service.service';
 import { FirestoreService } from './services/firestore.service';
 import { RoutingService } from './services/routing.service';
@@ -36,7 +38,8 @@ import { LoadingService } from './shared/services/loading/loading.service';
     LoginComponent,
     RecoverPasswordComponent,
     SignInComponent,
-    CreateAccountComponent
+    CreateAccountComponent,
+    MenuComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +61,8 @@ import { LoadingService } from './shared/services/loading/loading.service';
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
-    MainModule
+    MatGridListModule,
+    MatMenuModule
   ],
   providers: [AuthServiceService, FirestoreService, LoadingService, RoutingService],
   bootstrap: [AppComponent]

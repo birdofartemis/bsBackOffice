@@ -12,6 +12,7 @@ export class AppComponent implements OnInit{
   title = 'bsBackoffice';
   loading$!: Observable<boolean>;
 
+
   constructor(private loadingService: LoadingService) {}
 
   ngOnInit(): void {
