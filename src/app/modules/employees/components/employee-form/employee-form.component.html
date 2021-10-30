@@ -1,1 +1,58 @@
-<p>employee-form works!</p>
+<div class="container">
+
+    <div class="left-container">
+        <h1>B&S Booking</h1>
+    </div>
+
+    <div class = "right-container">
+        <mat-card>
+            <mat-card-title>Novo Colaborador</mat-card-title>
+
+            <mat-card-content>
+                <form [formGroup]="collaboratorForm">
+
+                    <div class="form-collaborator-data">
+                            <mat-form-field>
+                                <mat-label>Nome Completo</mat-label>
+                                <input matInput type="text" required formControlName="name" />
+                                <mat-error *ngIf="collaboratorForm?.get('name')?.errors?.required">Field is required</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-label>Telefone</mat-label>
+                                <input matInput type="text" required formControlName="phone" />
+                                <mat-error *ngIf="collaboratorForm?.get('phone')?.errors?.required">Field is required</mat-error>
+                            </mat-form-field> 
+                    </div>
+
+                    <div class="form-collaborator-data">
+                        <mat-form-field>
+                            <mat-label>Email</mat-label>
+                            <input matInput type="email" required formControlName="email" />
+                            <mat-error *ngIf="collaboratorForm?.get('email')?.errors?.required">Field is required</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-collaborator-data">
+                        <mat-form-field>
+                            <mat-label>CC</mat-label>
+                            <input matInput type="text" required formControlName="citizenCard" />
+                            <mat-error *ngIf="collaboratorForm?.get('citizenCard')?.errors?.required">Field is required</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <mat-label>NIF</mat-label>
+                            <input matInput type="text" required formControlName="taxIdNumber" />
+                            <mat-error *ngIf="collaboratorForm?.get('taxIdNumber')?.errors?.required">Field is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                </form>
+            </mat-card-content>
+
+            <mat-card-actions>
+                <button mat-flat-button type="button" color="primary" [disabled]="collaboratorForm.invalid" (click)="addCollaborator(collaboratorForm?.value )"> Adicionar Funcionário </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+
+</div>

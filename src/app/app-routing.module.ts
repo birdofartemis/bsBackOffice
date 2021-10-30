@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { redirectUnauthorizedTo } from '@angular/fire/compat/auth-guard';
+import { AngularFireAuthGuard, redirectUnauthorizedTo } from '@angular/fire/compat/auth-guard';
 import { RouterModule, Routes } from '@angular/router';
 
 import { CreateAccountComponent } from './components/create-account/create-account.component';
@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'signin', component: SignInComponent },
   { path: 'signin/account', component: CreateAccountComponent },
-  {path: 'home', loadChildren: () => import('./main/main.module').then((m) => m.MainModule)},
+  {path: 'home', loadChildren: () => import('./main/main.module').then((m) => m.MainModule),  canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectUnauthorizedToLogin }},
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 

@@ -35,4 +35,8 @@ export class AuthServiceService {
    return from(this.auth.createUserWithEmailAndPassword(others.email, password))
    .pipe(tap(({ user }) => this.resourceService.addUserData(others, user?.uid)));
   }
+
+  getUserUID() {
+     return this.auth.authState;
+  }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 
+import { Collaborator } from '../shared/model/collaborator.module';
 import { User } from '../shared/model/user.model';
 
 @Injectable({
@@ -8,13 +9,20 @@ import { User } from '../shared/model/user.model';
 })
 export class FirestoreService {
 
-  constructor(public db: AngularFirestore) { }
+  constructor(private db: AngularFirestore ) { }
 
-  addUserData(user: Partial<User>, userId: string | undefined): void {
-    console.log(userId);
-    
+  addUserData(user: Partial<User>, userId: string | undefined): void {    
     if(userId) {
       this.db.collection('users').doc(userId).set({data: user});   
     } 
+  }
+
+  addCollaboratorData(collaborator: Collaborator) : void {
+    this.db.collection('employees').doc(collaborator.citizenCard).set({data: collaborator})
+  }
+
+  getCollaborators(userUID: string) : AngularFirestoreCollection<Collaborator> {
+    return this.db.collection('employees', ref =>
+      ref.where("uidSallon", "==", userUID));
   }
 }
