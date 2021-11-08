@@ -29,7 +29,6 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { MenuComponent } from './main/menu/menu.component';
 import { AuthServiceService } from './services/auth-service.service';
 import { FirestoreService } from './services/firestore.service';
-import { RoutingService } from './services/routing.service';
 import { LoadingService } from './shared/services/loading/loading.service';
 
 @NgModule({
@@ -64,7 +63,7 @@ import { LoadingService } from './shared/services/loading/loading.service';
     MatGridListModule,
     MatMenuModule
   ],
-  providers: [AuthServiceService, FirestoreService, LoadingService, RoutingService],
+  providers: [AuthServiceService, FirestoreService, LoadingService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

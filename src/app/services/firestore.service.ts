@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { AngularFirestore, CollectionReference } from '@angular/fire/compat/firestore';
+import { from, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Collaborator } from '../shared/model/collaborator.module';
 import { User } from '../shared/model/user.model';
@@ -17,12 +19,16 @@ export class FirestoreService {
     } 
   }
 
-  addCollaboratorData(collaborator: Collaborator) : void {
-    this.db.collection('employees').doc(collaborator.citizenCard).set({data: collaborator})
+  addCollaboratorData(collaborator: Collaborator): void {
+    this.db.collection('employees').doc(collaborator.citizenCard).set({...collaborator})
   }
 
-  getCollaborators(userUID: string) : AngularFirestoreCollection<Collaborator> {
-    return this.db.collection('employees', ref =>
-      ref.where("uidSallon", "==", userUID));
+  deleteCollaboratorData(collaborator: Collaborator): void {
+    this.db.collection('employees').doc(collaborator.citizenCard).delete();
+  }
+
+  getCollaborators(userUID: string): Observable<Collaborator[]> {
+    const ref = this.db.collection('employees').ref as CollectionReference<Collaborator>;
+    return from(ref.where("uidSallon", "==", userUID).get()).pipe(map((res) => res.docs.map((value) => value.data())));
   }
 }

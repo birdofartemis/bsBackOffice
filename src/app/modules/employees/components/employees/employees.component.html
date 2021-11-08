@@ -19,20 +19,25 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Nome </th>
               <td mat-cell *matCellDef="let element"> {{element.name}} </td>
             </ng-container>
-          
-            <ng-container matColumnDef="surname">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Apelido </th>
-              <td mat-cell *matCellDef="let element"> {{element.surname}} </td>
-            </ng-container>
 
             <ng-container matColumnDef="email">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
               <td mat-cell *matCellDef="let element"> {{element.email}} </td>
             </ng-container>
           
-            <ng-container matColumnDef="phoneNumber">
+            <ng-container matColumnDef="phone">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Telemóvel </th>
-              <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="citizenCard">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> CC </th>
+              <td mat-cell *matCellDef="let element"> {{element.citizenCard}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="taxIdNumber">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> NIF </th>
+              <td mat-cell *matCellDef="let element"> {{element.taxIdNumber}} </td>
             </ng-container>
 
             <ng-container matColumnDef="actions">

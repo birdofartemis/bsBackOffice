@@ -36,7 +36,7 @@ export class AuthServiceService {
    .pipe(tap(({ user }) => this.resourceService.addUserData(others, user?.uid)));
   }
 
-  getUserUID() {
+  getUserUID(): Observable<firebase.User | null> {
      return this.auth.authState;
   }
 }

@@ -1,12 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { RoutingService } from 'src/app/services/routing.service';
 import { LoadingService } from 'src/app/shared/services/loading/loading.service';
 
 import { AuthServiceService } from '../../services/auth-service.service';
-import { FirestoreService } from '../../services/firestore.service';
 import { User } from '../../shared/model/user.model';
 
 @Component({
@@ -20,7 +19,7 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
   signForm : FormGroup;
   hide : boolean;
 
-  constructor(private fb: FormBuilder, private authService: AuthServiceService, private db: FirestoreService, private loadingService: LoadingService, private _snackBar: MatSnackBar, private routeService: RoutingService) { 
+  constructor(private fb: FormBuilder, private authService: AuthServiceService, private router: Router, private route: ActivatedRoute, private loadingService: LoadingService, private _snackBar: MatSnackBar) { 
     this.hide = true;
     this.subscription = new Subscription();
     this.signForm = this.fb.group({
@@ -46,7 +45,7 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
      this.authService.signUp(user).subscribe(
        //Sucess
        () => {
-        this.routeService.navigate('home');
+        this.router.navigate(['home'], { relativeTo: this.route })
         this.loadingService.updateLoading(false);
         }, 
       //Error
