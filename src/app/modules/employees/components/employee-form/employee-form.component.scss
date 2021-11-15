@@ -2,7 +2,8 @@
   margin-top: 1rem;
   margin-left: 1rem;
   display: flex;
-  height: auto;
+  background-image: url('../../../../../assets/Login-Background.jpg');
+  height: 100%;
   width: auto;
 }
 
@@ -10,7 +11,8 @@
   width: 50%;
   height: auto;
   display: flex;
-  background-color: #1f8db0;
+
+  text-align: center;
   justify-content: center;
   align-items: center;
   color: #fff;
@@ -27,5 +29,11 @@
     mat-form-field {
       margin: 0.7rem;
     }
+  }
+}
+
+.buttons-div {
+  button {
+    margin: 0.7rem;
   }
 }

@@ -47,11 +47,11 @@
                   <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                  <button mat-menu-item (click)="editColaborator()">
+                  <button mat-menu-item (click)="editColaborator($event, row)">
                     <mat-icon>edit</mat-icon>
                     <span>Editar</span>
                   </button>
-                  <button mat-menu-item (click)="deleteColaborator()">
+                  <button mat-menu-item (click)="deleteColaborator($event, row)">
                     <mat-icon>person_remove</mat-icon>
                     <span>Apagar</span>
                   </button>
@@ -60,14 +60,8 @@
             </ng-container>
           
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row 
-            (click)="clickedRow = row"
-            *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                 showFirstLastButtons 
-                 aria-label="Select page of periodic elements">
-          </mat-paginator>
-          
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>      
     </div>
 </div>

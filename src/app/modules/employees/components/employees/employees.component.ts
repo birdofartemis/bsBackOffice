@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
@@ -20,7 +20,7 @@ import { DeleteWarningComponent } from '../delete-warning/delete-warning.compone
   templateUrl: './employees.component.html',
   styleUrls: ['./employees.component.scss']
 })
-export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {  
+export class EmployeesComponent implements OnInit, OnDestroy, AfterViewInit, MatPaginatorIntl {  
   changes: Subject<void>;
   itemsPerPageLabel: string;
   nextPageLabel: string;
@@ -30,7 +30,6 @@ export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {
 
   displayedColumns: string[] = ['name', 'email', 'phone', 'citizenCard', 'taxIdNumber', 'actions'];
   dataSource!: MatTableDataSource<Collaborator>;
-  clickedRow!: Collaborator;
   subscription: Subscription;
 
   @ViewChild(MatTable) table!: MatTable<Collaborator>;
@@ -48,17 +47,15 @@ export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {
       this.nextPageLabel = 'Próxima página';
       this.previousPageLabel = 'Página anterior';
       this.lastPageLabel = 'Última página';
+
       this.changes = new Subject<void>();
 
       this.subscription = new Subscription();
     }
   
     getRangeLabel(page: number, pageSize: number, length: number): string {
-      if (length === 0) {
-        return `Página 1 de 1`;
-      }
       const amountPages = Math.ceil(length / pageSize);
-      return `Página ${page + 1} de ${amountPages}`;
+      return length === 0 ? `Página 1 de 1` : `Página ${page + 1} de ${amountPages}`;
     }
 
   ngOnDestroy(): void {
@@ -66,28 +63,33 @@ export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {
   }
 
   ngOnInit(): void {
-    this.loadingService.updateLoading(true);
 
-   this.subscription.add(this.auth.authState.pipe(switchMap(( user ) => this.fs.getCollaborators(user!.uid)))
-    .subscribe((res) => {
-      this.dataSource = new MatTableDataSource(res);
-
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-
-      this.loadingService.updateLoading(false);
+   this.subscription.add(
+     this.auth.authState.pipe(switchMap(
+       ( user ) => this.fs.getCollaborators(user!.uid))).subscribe((res) => {
+          this.dataSource = new MatTableDataSource(res);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+          this.loadingService.updateLoading(false);
     }));
+  }
+
+  ngAfterViewInit(): void {
+     //this.loadingService.updateLoading(true);
   }
 
   addColaborator(): void {
     this.router.navigate(['newemployee'], { relativeTo: this.route })
   }
 
-  editColaborator(): void {
+  editColaborator(event: Event, collaborator: Collaborator): void {
+    event.stopPropagation();
+     void this.router.navigate(['newemployee', collaborator.citizenCard], { relativeTo: this.route })
   }
 
-  deleteColaborator(): void {
-    this.openDialog(this.clickedRow);
+  deleteColaborator(event: Event, collaborator: Collaborator): void {
+    event.stopPropagation();
+    this.openDialog(collaborator);
   }
 
   private openDialog(employee: Collaborator) : void {
@@ -96,11 +98,11 @@ export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {
     this.subscription.add(
       dialofRef.afterClosed().subscribe(res => {
         if(res){
-          this.fs.deleteCollaboratorData(this.clickedRow);
-          const index = this.dataSource.data.indexOf(this.clickedRow);
+          this.fs.deleteCollaboratorData(employee);
+          const index = this.dataSource.data.indexOf(employee);
           this.dataSource.data.splice(index, 1);
           this.dataSource._updateChangeSubscription();
-          this._snackBar.open( employee.name + ' foi apagado com sucesso!', 'Fechar');
+          this._snackBar.open( `${employee.name} foi apagado com sucesso!`, 'Fechar');
         }
       })
       );

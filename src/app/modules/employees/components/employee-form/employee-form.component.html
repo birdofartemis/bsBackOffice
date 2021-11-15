@@ -1,12 +1,15 @@
 <div class="container">
 
     <div class="left-container">
-        <h1>B&S Booking</h1>
+        <div>
+            <h1>B&S Booking</h1>
+            <h3>Colaboradores</h3>
+        </div>
     </div>
 
     <div class = "right-container">
         <mat-card>
-            <mat-card-title>Novo Colaborador</mat-card-title>
+            <mat-card-title>{{ textHeader }}</mat-card-title>
 
             <mat-card-content>
                 <form [formGroup]="collaboratorForm">
@@ -34,9 +37,9 @@
                     </div>
 
                     <div class="form-collaborator-data">
-                        <mat-form-field>
+                        <mat-form-field *ngIf="!isEdit">
                             <mat-label>CC</mat-label>
-                            <input matInput type="text" required formControlName="citizenCard" />
+                            <input matInput type="text" required formControlName="citizenCard"/>
                             <mat-error *ngIf="collaboratorForm?.get('citizenCard')?.errors?.required">Field is required</mat-error>
                         </mat-form-field>
 
@@ -50,7 +53,10 @@
             </mat-card-content>
 
             <mat-card-actions>
-                <button mat-flat-button type="button" color="primary" [disabled]="collaboratorForm.invalid" (click)="addCollaborator(collaboratorForm?.value )"> Adicionar Funcionário </button>
+                <div class="buttons-div">
+                    <button mat-flat-button type="button" color="warn" routerLink="/home/employees" routerLinkActive="active"> {{ buttonExitText }} </button>
+                    <button mat-flat-button type="button" color="primary" [disabled]="collaboratorForm.invalid" (click)="isEdit ? editCollaborator($event, collaboratorForm?.value ) : addCollaborator($event, collaboratorForm?.value )"> {{ buttonConfirmText }} </button>
+                </div> 
             </mat-card-actions>
         </mat-card>
     </div>

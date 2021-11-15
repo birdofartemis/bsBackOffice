@@ -1,1 +1,56 @@
-<p>services-form works!</p>
+<div class="container">
+
+    <div class="left-container">
+        <div>
+            <h1>B&S Booking</h1>
+            <h3>Serviços</h3>
+        </div>
+    </div>
+
+        <div class = "right-container">
+            <mat-card>
+                <mat-card-title>{{ textHeader }}</mat-card-title>
+    
+                <mat-card-content>
+                    <form [formGroup]="serviceForm">
+    
+                        <div class="form-collaborator-data">
+                                <mat-form-field>
+                                    <mat-label>Serviço</mat-label>
+                                    <input matInput type="text" required formControlName="name" />
+                                    <mat-error *ngIf="serviceForm?.get('name')?.errors?.required">Field is required</mat-error>
+                                </mat-form-field>
+    
+                                <mat-form-field>
+                                    <mat-label>Preço</mat-label>
+                                    <input matInput type="number" required formControlName="price" />
+                                    <span matPrefix>€&nbsp;</span>
+                                    <mat-error *ngIf="serviceForm?.get('price')?.errors?.required">Field is required</mat-error>
+                                </mat-form-field>
+                        </div>
+                        <div>
+                            <mat-form-field>
+                                <mat-label>Colaborador</mat-label>
+                                <mat-select formControlName="collaborator" multiple>
+                                    <mat-select-trigger>
+                                        {{serviceForm?.get('collaborator')?.value ? serviceForm?.get('collaborator')?.value[0]?.name : ''}}
+                                        <span *ngIf="serviceForm?.get('collaborator')?.value?.length > 1" class="example-additional-selection">
+                                          (+{{serviceForm?.get('collaborator')?.value.length - 1}} {{serviceForm?.get('collaborator')?.value?.length === 2 ? 'other' : 'others'}})
+                                        </span>
+                                      </mat-select-trigger>
+                                    <mat-option *ngFor="let collaborator of collaboratorList$ | async" [value]="collaborator">{{ collaborator.name }}</mat-option>
+                                  </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </form>
+
+                    <mat-card-actions *ngIf="{'user': user$ | async} as data">
+                        <div class="buttons-div">
+                            <button mat-flat-button type="button" color="warn" routerLink="/home/services" routerLinkActive="active"> {{ buttonExitText }} </button>
+                            <button mat-flat-button type="button" color="primary" [disabled]="serviceForm.invalid" (click)="isEdit ? editService($event, serviceForm?.value ) : addService($event, serviceForm?.value, data.user)"> {{ buttonConfirmText }} </button>
+                        </div> 
+                    </mat-card-actions>
+                </mat-card-content>
+            </mat-card>       
+    </div>
+</div>

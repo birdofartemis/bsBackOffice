@@ -10,6 +10,7 @@
         <a mat-list-item routerLink="/home/employees"><mat-icon>perm_identity</mat-icon>Colaboradores</a>
         <a mat-list-item routerLink="/home/services"><mat-icon>shopping_bag</mat-icon>Serviços</a>
         <a mat-list-item routerLink="/home/employees"><mat-icon>settings</mat-icon>Configurações</a>
+        <a mat-list-item (click)="logOut($event)"><mat-icon>logout</mat-icon>Sair</a>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>

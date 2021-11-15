@@ -39,4 +39,8 @@ export class AuthServiceService {
   getUserUID(): Observable<firebase.User | null> {
      return this.auth.authState;
   }
+
+  logOutUser(): Observable<void> {
+    return from(this.auth.signOut());
+  }
 }
