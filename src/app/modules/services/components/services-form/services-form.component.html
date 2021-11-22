@@ -29,17 +29,23 @@
                                 </mat-form-field>
                         </div>
                         <div>
-                            <mat-form-field>
+                            <mat-form-field *ngIf="{'data': collaboratorList$ | async} as collaborators">
                                 <mat-label>Colaborador</mat-label>
                                 <mat-select formControlName="collaborator" multiple>
-                                    <mat-select-trigger>
-                                        {{serviceForm?.get('collaborator')?.value ? serviceForm?.get('collaborator')?.value[0]?.name : ''}}
+                                   <mat-select-trigger>
+                                        {{serviceForm?.get('collaborator')?.value ? getFirstCollaboratorName(serviceForm?.get('collaborator')?.value[0], collaborators?.data) : ''}}
                                         <span *ngIf="serviceForm?.get('collaborator')?.value?.length > 1" class="example-additional-selection">
-                                          (+{{serviceForm?.get('collaborator')?.value.length - 1}} {{serviceForm?.get('collaborator')?.value?.length === 2 ? 'other' : 'others'}})
+                                          (+{{serviceForm?.get('collaborator')?.value.length - 1}} {{serviceForm?.get('collaborator')?.value?.length === 2 ? 'outro' : 'outros'}})
                                         </span>
                                       </mat-select-trigger>
-                                    <mat-option *ngFor="let collaborator of collaboratorList$ | async" [value]="collaborator">{{ collaborator.name }}</mat-option>
+                                    <mat-option *ngFor="let collaborator of collaborators.data" [value]="collaborator.citizenCard">{{ collaborator.name }}</mat-option>
                                   </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <mat-form-field>
+                                <mat-label>Descrição do serviço</mat-label>
+                                <textarea matInput formControlName="description"></textarea>
                             </mat-form-field>
                         </div>
                     </form>

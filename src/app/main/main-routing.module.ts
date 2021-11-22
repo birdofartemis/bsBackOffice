@@ -11,7 +11,8 @@ const routes: Routes = [
     {path: '', component: DashboardComponent},
     {path: 'employees', loadChildren: () => import('../modules/employees/employees.module').then((m) => m.EmployeesModule)},
     {path: 'services', loadChildren: () => import('../modules/services/services.module').then((m) => m.ServicesModule)},
-    {path: 'bookings', loadChildren: () => import('../modules/bookings/bookings.module').then((m) => m.BookingsModule)}
+    {path: 'bookings', loadChildren: () => import('../modules/bookings/bookings.module').then((m) => m.BookingsModule)},
+    {path: 'config', loadChildren: () => import('../modules/config/config.module').then((m) => m.ConfigModule)}
     ]
   }
 ];

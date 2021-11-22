@@ -16,8 +16,17 @@
         background-color: #1f8db0;
       }
     }
-    mat-icon {
-      margin-right: 0.3rem;
-    }
+  }
+  button {
+    margin-right: 0.3rem;
+  }
+  mat-icon {
+    margin-right: 0.3rem;
+  }
+
+  img {
+    height: 200px;
+    object-fit: cover;
+    object-position: center center;
   }
 }

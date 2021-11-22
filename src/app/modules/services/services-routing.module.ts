@@ -6,7 +6,8 @@ import { ServicesComponent } from './components/services/services.component';
 
 const routes: Routes = [
   { path: '', component: ServicesComponent },
-  { path: 'newservice', component: ServicesFormComponent }
+  { path: 'newservice', component: ServicesFormComponent },
+  { path: 'newservice/:id', component: ServicesFormComponent}
 ];
 
 @NgModule({

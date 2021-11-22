@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, CollectionReference } from '@angular/fire/compat/firestore';
+import { AngularFirestore, CollectionReference, DocumentReference } from '@angular/fire/compat/firestore';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Collaborator } from '../shared/model/collaborator.module';
-import { Service } from '../shared/model/service.module';
+import { Service, ServiceDoc } from '../shared/model/service.module';
 import { User } from '../shared/model/user.model';
 
 @Injectable({
@@ -13,13 +13,13 @@ import { User } from '../shared/model/user.model';
 export class FirestoreService {
 
   constructor(private db: AngularFirestore ) { }
-
+//User
   addUserData(user: Partial<User>, userId: string | undefined): void {    
     if(userId) {
       this.db.collection('users').doc(userId).set({data: user});   
     } 
   }
-
+//Collaborators
   addCollaboratorData(collaborator: Collaborator): void {
     this.db.collection('employees').doc(collaborator.citizenCard).set({...collaborator})
   }
@@ -41,18 +41,35 @@ export class FirestoreService {
     const {citizenCard} = collaborator
     this.db.collection('employees').doc<Collaborator>(citizenCard).update(collaborator);
   }
-
-  addServiceData(service: Service): Observable<void> {
-    return from(this.db.collection('services').doc().set({...service}))
+//Services
+  addServiceData(service: Service): Observable<DocumentReference<unknown>> {
+    return from(this.db.collection('services').add({...service}));
   }
 
-  deleteServiceData(service: Service): void {
-    const {uid, name} = service;
-    this.db.collection('services').doc(`${uid}-${name}`).delete();
+  deleteServiceData(userUID: string, serviceName: string): void {
+    const ref = this.db.collection('services').ref as CollectionReference<Service>;
+    from(ref.where("uidSallon", "==", userUID).where("name", "==", serviceName).get())
+    .subscribe(res => {
+      res.forEach(doc => {
+        doc.ref.delete();
+      })
+    });
   }
 
-  updateServiceData(service: Service): void{
-    const {uid, name} = service;
-    this.db.collection('employees').doc<Service>(`${uid}-${name}`).update(service);
+  updateServiceData(service: Service): void {
+    this.db.collection('services').doc(service.idDocument).update(service);
+  }
+
+  getServices(userUID: string): Observable<Service[]> {
+    const ref = this.db.collection('services').ref as CollectionReference<Service>;
+    return from(ref.where("uidSallon", "==", userUID).get()).pipe(map((res) => res.docs.map((value) => value.data())));
+  }
+  getService(idDocument: string): Observable<ServiceDoc> {
+    return this.db.collection('services').doc<Service>(idDocument).get();
+  }
+
+  getCollaboratorsFromService(citizenCards: string[]): Observable<Collaborator[]>{
+    const ref = this.db.collection('employees').ref as CollectionReference<Collaborator>;
+    return from(ref.where("citizenCard", "in", citizenCards).get()).pipe(map((res) => res.docs.map((value) => value.data())));
   }
 }

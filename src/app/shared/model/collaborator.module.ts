@@ -1,4 +1,5 @@
 export interface Collaborator {
+    url?: string;
     uidSallon: string
     name: string;
     email: string;
