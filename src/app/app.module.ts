@@ -22,13 +22,14 @@ import { environment } from 'src/environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CreateAccountComponent } from './components/create-account/create-account.component';
 import { LoginComponent } from './components/login/login.component';
 import { RecoverPasswordComponent } from './components/recover-password/recover-password.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { MenuComponent } from './main/menu/menu.component';
 import { AuthServiceService } from './services/auth-service.service';
 import { FirestoreService } from './services/firestore.service';
+import { InfoWarningComponent } from './shared/components/info-warning/info-warning.component';
+import { CreateAccountComponent } from './shared/modules/sallonData/component/create-account/create-account.component';
 import { LoadingService } from './shared/services/loading/loading.service';
 
 @NgModule({
@@ -38,7 +39,8 @@ import { LoadingService } from './shared/services/loading/loading.service';
     RecoverPasswordComponent,
     SignInComponent,
     CreateAccountComponent,
-    MenuComponent
+    MenuComponent,
+    InfoWarningComponent
   ],
   imports: [
     BrowserModule,
@@ -66,6 +68,4 @@ import { LoadingService } from './shared/services/loading/loading.service';
   providers: [AuthServiceService, FirestoreService, LoadingService],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-   
-}
+export class AppModule {}

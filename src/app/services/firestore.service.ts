@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 
 import { Collaborator } from '../shared/model/collaborator.model';
 import { Service, ServiceDoc } from '../shared/model/service.model';
-import { User } from '../shared/model/user.model';
+import { User, UserDoc } from '../shared/model/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +15,21 @@ export class FirestoreService {
   //User
   addUserData(user: Partial<User>, userId: string | undefined): void {
     if (userId) {
-      this.db.collection('users').doc(userId).set({ data: user });
+      this.db.collection('users').doc(userId).set(user);
     }
   }
+
+  getUserData(idDocument: string): Observable<UserDoc> {
+    return this.db.collection('users').doc<User>(idDocument).get();
+  }
+
+  updateUserData(user: Partial<User>, userId: string) {
+    if (userId) {
+      const { termsConditions, ...userData } = user;
+      this.db.collection('users').doc<User>(userId).update(userData);
+    }
+  }
+
   //Collaborators
   addCollaboratorData(collaborator: Collaborator): void {
     this.db

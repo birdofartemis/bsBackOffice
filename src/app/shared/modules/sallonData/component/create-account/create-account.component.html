@@ -5,11 +5,11 @@
 
   <div class="right-container">
     <mat-card>
-      <mat-card-title>Criar Conta</mat-card-title>
+      <mat-card-title>Configurar Conta</mat-card-title>
 
       <mat-card-content>
-        <form [formGroup]="signForm">
-          <div class="form-email">
+        <form [formGroup]="!isEdit ? signForm : editSignForm">
+          <div class="form-email" *ngIf="!isEdit">
             <mat-form-field>
               <mat-label>Email</mat-label>
               <input matInput type="email" required formControlName="email" />
@@ -47,7 +47,7 @@
             </mat-form-field>
           </div>
 
-          <div class="form-password">
+          <div class="form-password" *ngIf="!isEdit">
             <mat-form-field>
               <mat-label>Password</mat-label>
               <input matInput [type]="hide ? 'password' : 'text'" required formControlName="password" />
@@ -71,8 +71,14 @@
       </mat-card-content>
 
       <mat-card-actions>
-        <button mat-flat-button type="button" color="primary" [disabled]="signForm.invalid" (click)="signIn(signForm?.value )">
-          Criar Conta
+        <button
+          mat-flat-button
+          type="button"
+          color="primary"
+          [disabled]="!isEdit ? signForm.invalid : editSignForm.invalid"
+          (click)="!isEdit ? signIn(signForm?.value) : editUserData(editSignForm?.value)"
+        >
+          Concluir
         </button>
       </mat-card-actions>
     </mat-card>

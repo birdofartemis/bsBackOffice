@@ -6,13 +6,13 @@
   <div class="container-body">
     <mat-selection-list #routes [multiple]="false">
       <mat-divider></mat-divider>
-      <a routerLink="/signin" routerLinkActive="active"><mat-list-option>Alterar dados do Salão ou Barbearia?</mat-list-option></a>
+      <a (click)="editUserData($event)"><mat-list-option>Alterar dados do Salão ou Barbearia?</mat-list-option></a>
       <mat-divider></mat-divider>
       <a routerLink="/signin" routerLinkActive="active"><mat-list-option>Mudar email ou password?</mat-list-option></a>
       <mat-divider></mat-divider>
       <a routerLink="/signin" routerLinkActive="active"><mat-list-option>Cancelar ou alterar plano de pagamento?</mat-list-option></a>
       <mat-divider></mat-divider>
-      <a routerLink="/signin" routerLinkActive="active"><mat-list-option>Ajuda?</mat-list-option></a>
+      <a (click)="openDialog()"><mat-list-option>Ajuda?</mat-list-option></a>
       <mat-divider></mat-divider>
       <mat-list-option><mat-slide-toggle color="primary">Experimente o tema escuro!</mat-slide-toggle></mat-list-option>
     </mat-selection-list>
