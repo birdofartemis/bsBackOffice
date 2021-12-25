@@ -1,14 +1,11 @@
 .container {
   .container-header {
     display: flex;
-    margin: 1rem;
+    padding: 0 2rem 0 2rem;
     justify-content: space-between;
-    header {
-      color: #2196f3;
+    h1 {
       font-weight: bolder;
-      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
       margin-top: 0.5rem;
-      font-size: 2rem;
     }
     .button-container {
       button {
@@ -19,7 +16,14 @@
   mat-icon {
     margin-right: 0.3rem;
   }
+
+  main {
+    padding: 2rem;
+  }
+
   .container-body {
+    height: 60vh;
+    overflow: auto;
     table {
       width: 100%;
     }

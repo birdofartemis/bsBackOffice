@@ -18,7 +18,6 @@ import { User, UserDoc } from '../../../../model/user.model';
 export class CreateAccountComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   signForm: FormGroup;
-  editSignForm: FormGroup;
   hide: boolean;
   isEdit: boolean;
 
@@ -34,19 +33,11 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
     this.hide = true;
     this.isEdit = false;
     this.subscription = new Subscription();
+
     this.signForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      passwordConfirmation: ['', this.validatePassword()],
-      enterprise: ['', Validators.required],
-      postalCode: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
-      name: ['', Validators.required],
-      termsConditions: ['', [Validators.required, Validators.requiredTrue]]
-    });
-
-    //Doubts about this sollutions
-    this.editSignForm = this.fb.group({
+      passwordConfirmation: ['', [Validators.required, this.validatePassword()]],
       enterprise: ['', Validators.required],
       postalCode: ['', Validators.required],
       phoneNumber: ['', Validators.required],
@@ -63,9 +54,13 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
           switchMap(({ id }) => this.fs.getUserData(id)),
           tap((user: UserDoc) => {
             const values = user.data();
-            this.editSignForm.patchValue(values || {});
+            this.signForm.patchValue(values || {});
 
             this.isEdit = true;
+
+            this.clearValidators(this.signForm.get('email'));
+            this.clearValidators(this.signForm.get('password'));
+            this.clearValidators(this.signForm.get('passwordConfirmation'));
           })
         )
         .subscribe()
@@ -75,6 +70,12 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
         this.signForm.get('passwordConfirmation')?.updateValueAndValidity();
       })
     );
+  }
+
+  clearValidators(control: AbstractControl | null): void {
+    control?.clearAsyncValidators();
+    control?.clearValidators();
+    control?.updateValueAndValidity();
   }
 
   signIn(user: User): void {

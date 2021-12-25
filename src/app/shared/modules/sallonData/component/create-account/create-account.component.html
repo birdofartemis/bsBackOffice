@@ -8,7 +8,7 @@
       <mat-card-title>Configurar Conta</mat-card-title>
 
       <mat-card-content>
-        <form [formGroup]="!isEdit ? signForm : editSignForm">
+        <form [formGroup]="signForm">
           <div class="form-email" *ngIf="!isEdit">
             <mat-form-field>
               <mat-label>Email</mat-label>
@@ -50,7 +50,7 @@
           <div class="form-password" *ngIf="!isEdit">
             <mat-form-field>
               <mat-label>Password</mat-label>
-              <input matInput [type]="hide ? 'password' : 'text'" required formControlName="password" />
+              <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required />
               <mat-error>Must have min of 6 charac</mat-error>
               <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                 <mat-icon> {{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
@@ -75,8 +75,8 @@
           mat-flat-button
           type="button"
           color="primary"
-          [disabled]="!isEdit ? signForm.invalid : editSignForm.invalid"
-          (click)="!isEdit ? signIn(signForm?.value) : editUserData(editSignForm?.value)"
+          [disabled]="signForm.invalid"
+          (click)="!isEdit ? signIn(signForm?.value) : editUserData(signForm?.value)"
         >
           Concluir
         </button>

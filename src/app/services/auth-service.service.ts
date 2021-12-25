@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/compat/app';
 import { from, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -11,7 +13,13 @@ import { FirestoreService } from './firestore.service';
   providedIn: 'root'
 })
 export class AuthServiceService {
-  constructor(private auth: AngularFireAuth, private resourceService: FirestoreService) {}
+  constructor(
+    private auth: AngularFireAuth,
+    private resourceService: FirestoreService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private _snackBar: MatSnackBar
+  ) {}
 
   logInAuth(email: string, password: string): Observable<firebase.auth.UserCredential> {
     return from(this.auth.signInWithEmailAndPassword(email, password));
@@ -30,6 +38,22 @@ export class AuthServiceService {
     return from(this.auth.createUserWithEmailAndPassword(others.email, password)).pipe(
       tap(({ user }) => this.resourceService.addUserData(others, user?.uid))
     );
+  }
+
+  updateUserEmail(onChangeUser: { email: string; newEmail: string; password: string }) {
+    return this.logInAuth(onChangeUser.email, onChangeUser.password).subscribe((res) => {
+      res.user?.updateEmail(onChangeUser.newEmail).then(
+        () => {
+          this._snackBar.open('Alteração executada com sucesso', 'Fechar');
+          this.logOutUser().subscribe();
+          this.router.navigate([''], { relativeTo: this.route });
+        },
+
+        () => {
+          this._snackBar.open('Não foi possível executar a alteração', 'Fechar');
+        }
+      );
+    });
   }
 
   getUserUID(): Observable<firebase.User | null> {

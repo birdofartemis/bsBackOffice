@@ -25,7 +25,7 @@ export class FirestoreService {
 
   updateUserData(user: Partial<User>, userId: string) {
     if (userId) {
-      const { termsConditions, ...userData } = user;
+      const { termsConditions, passwordConfirmation, password, ...userData } = user;
       this.db.collection('users').doc<User>(userId).update(userData);
     }
   }
