@@ -5,12 +5,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class LoadingService {
-
- private loading$: BehaviorSubject<boolean>;
+  private loading$: BehaviorSubject<boolean>;
+  private isDarkTheme$: BehaviorSubject<boolean>;
 
   constructor() {
     this.loading$ = new BehaviorSubject<boolean>(false);
-   }
+    this.isDarkTheme$ = new BehaviorSubject<boolean>(false);
+  }
 
   getLoadingState(): Observable<boolean> {
     return this.loading$;
@@ -18,5 +19,13 @@ export class LoadingService {
 
   updateLoading(value: boolean): void {
     this.loading$.next(value);
+  }
+
+  getIsDarkTheme(): Observable<boolean> {
+    return this.isDarkTheme$;
+  }
+
+  updateIsDarkTheme(value: boolean): void {
+    this.isDarkTheme$.next(value);
   }
 }

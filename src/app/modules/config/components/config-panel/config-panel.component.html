@@ -14,7 +14,11 @@
       <mat-divider></mat-divider>
       <a (click)="openInfoDialog()"><mat-list-option>Ajuda?</mat-list-option></a>
       <mat-divider></mat-divider>
-      <mat-list-option><mat-slide-toggle color="primary">Experimente o tema escuro!</mat-slide-toggle></mat-list-option>
+      <mat-list-option
+        ><mat-slide-toggle color="primary" [(ngModel)]="isTgButtonChecked" (change)="onDarkModeSwitched($event)"
+          >Experimente o tema escuro!</mat-slide-toggle
+        ></mat-list-option
+      >
     </mat-selection-list>
   </div>
 </div>

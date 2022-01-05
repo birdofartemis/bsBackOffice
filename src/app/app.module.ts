@@ -14,6 +14,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
@@ -63,7 +64,8 @@ import { LoadingService } from './shared/services/loading/loading.service';
     MatSidenavModule,
     MatListModule,
     MatGridListModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSlideToggleModule
   ],
   providers: [AuthServiceService, FirestoreService, LoadingService],
   bootstrap: [AppComponent]

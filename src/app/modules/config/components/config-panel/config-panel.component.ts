@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthServiceService } from 'src/app/services';
 import { InfoWarningComponent } from 'src/app/shared/components/info-warning/info-warning.component';
+import { LoadingService } from 'src/app/shared/services/loading/loading.service';
 
 import { FormDialogComponent } from '../form-dialog/form-dialog.component';
 
@@ -12,9 +14,20 @@ import { FormDialogComponent } from '../form-dialog/form-dialog.component';
   styleUrls: ['./config-panel.component.scss']
 })
 export class ConfigPanelComponent implements OnInit {
-  constructor(public dialog: MatDialog, public auth: AuthServiceService, private router: Router, private route: ActivatedRoute) {}
+  isTgButtonChecked!: boolean;
+  constructor(
+    public dialog: MatDialog,
+    public auth: AuthServiceService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private loading: LoadingService
+  ) {
+    this.loading.getIsDarkTheme().subscribe((value) => (this.isTgButtonChecked = value));
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loading.getIsDarkTheme().subscribe();
+  }
 
   editUserData(event: Event): void {
     event.stopPropagation();
@@ -23,6 +36,10 @@ export class ConfigPanelComponent implements OnInit {
         void this.router.navigate(['sallonData', user!.uid], { relativeTo: this.route });
       }
     });
+  }
+
+  onDarkModeSwitched(toggle: MatSlideToggleChange) {
+    this.loading.updateIsDarkTheme(toggle.checked);
   }
 
   openInfoDialog(): void {

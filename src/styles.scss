@@ -29,10 +29,19 @@ $bsBackoffice-theme: mat.define-light-theme(
   )
 );
 
+$bsBackoffice-theme-dark: mat.define-dark-theme(
+  (
+    color: (
+      primary: $bsBackoffice-primary,
+      accent: $bsBackoffice-accent,
+      warn: $bsBackoffice-warn
+    )
+  )
+);
+
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include mat.all-component-themes($bsBackoffice-theme);
 
 html,
 body {
@@ -49,4 +58,12 @@ body {
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+.theme-dark {
+  @include mat.all-component-themes($bsBackoffice-theme-dark);
+}
+
+.theme-light {
+  @include mat.all-component-themes($bsBackoffice-theme);
 }
