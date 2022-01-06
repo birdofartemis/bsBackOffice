@@ -3,6 +3,7 @@ import { AngularFirestore, CollectionReference, DocumentReference } from '@angul
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { Booking } from '../shared/model/booking.model';
 import { Collaborator } from '../shared/model/collaborator.model';
 import { Service, ServiceDoc } from '../shared/model/service.model';
 import { User, UserDoc } from '../shared/model/user.model';
@@ -79,5 +80,28 @@ export class FirestoreService {
   getCollaboratorsFromService(citizenCards: string[]): Observable<Collaborator[]> {
     const ref = this.db.collection('employees').ref as CollectionReference<Collaborator>;
     return from(ref.where('citizenCard', 'in', citizenCards).get()).pipe(map((res) => res.docs.map((value) => value.data())));
+  }
+
+  //Bookings
+
+  addBookingData(booking: Booking): Observable<DocumentReference<unknown>> {
+    return from(this.db.collection('bookings').add({ ...booking }));
+  }
+
+  deleteBookingData({ idDocument }: Booking): void {
+    this.db.collection('bookings').doc(idDocument).delete();
+  }
+
+  getBookings(userUID: string): Observable<Booking[]> {
+    const ref = this.db.collection('bookings').ref as CollectionReference<Booking>;
+    return from(ref.where('uidSallon', '==', userUID).get()).pipe(map((res) => res.docs.map((value) => value.data())));
+  }
+
+  getBooking({ idDocument }: Booking) {
+    return this.db.collection('bookings').doc<Booking>(idDocument).get();
+  }
+
+  updateBookingData(booking: Booking): void {
+    this.db.collection('bookings').doc(booking.idDocument).update(booking);
   }
 }
