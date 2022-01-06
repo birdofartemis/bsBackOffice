@@ -8,6 +8,20 @@
       <mat-card-title>Configurar Conta</mat-card-title>
 
       <mat-card-content>
+        <div class="photo-container">
+          <div class="change-photo" (click)="changeImage()">
+            <span class="material-icons photo_camera"> photo_camera </span>
+          </div>
+          <img *ngIf="false; else avatar" class="resource-photo" />
+          <!--   <img *ngIf="photo.new || photo.actual; else avatar" [src]="photo.new || photo.actual" class="resource-photo" /> -->
+
+          <ng-template #avatar>
+            <i class="material-icons icon noresource-photo">account_circle</i>
+          </ng-template>
+        </div>
+        <!-- (change)="imageChanged(imageInput)" -->
+        <input #imageInput id="image" type="file" />
+
         <form [formGroup]="signForm">
           <div class="form-email" *ngIf="!isEdit">
             <mat-form-field>

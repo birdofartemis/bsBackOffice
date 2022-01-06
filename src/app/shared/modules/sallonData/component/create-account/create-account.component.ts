@@ -116,6 +116,32 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
 
   showTerms(event: Event) {}
 
+  imageChanged(imageInput: { files: File[] }): void {
+    const file = imageInput.files[0];
+
+    if (!file) return;
+
+    const mimeType = file.type;
+    const reg = /image\/*/;
+    if (reg.exec(mimeType) == null) {
+      this._snackBar.open('Apenas imagens são suportadas');
+      return;
+    }
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      /* if (editingSelf) this.store.dispatch(setUserPhoto({ photo: reader.result as string }));
+      return this.store.dispatch(addResourcePhoto({ photo: reader.result, file })); */
+    };
+
+    // if (this.resourceForm.get('_id').value) this.store.dispatch(updatePicture({ id: this.resourceForm.get('_id').value as string, file }));
+  }
+
+  changeImage(): void {
+    document!.getElementById('image')!.click();
+  }
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
