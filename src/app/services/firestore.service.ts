@@ -88,8 +88,8 @@ export class FirestoreService {
     return from(this.db.collection('bookings').add({ ...booking }));
   }
 
-  deleteBookingData({ idDocument }: Booking): void {
-    this.db.collection('bookings').doc(idDocument).delete();
+  deleteBookingData({ documentId }: Booking): void {
+    this.db.collection('bookings').doc(documentId).delete();
   }
 
   getBookings(userUID: string): Observable<Booking[]> {
@@ -97,11 +97,11 @@ export class FirestoreService {
     return from(ref.where('uidSallon', '==', userUID).get()).pipe(map((res) => res.docs.map((value) => value.data())));
   }
 
-  getBooking({ idDocument }: Booking) {
-    return this.db.collection('bookings').doc<Booking>(idDocument).get();
+  getBooking({ documentId }: Booking) {
+    return this.db.collection('bookings').doc<Booking>(documentId).get();
   }
 
   updateBookingData(booking: Booking): void {
-    this.db.collection('bookings').doc(booking.idDocument).update(booking);
+    this.db.collection('bookings').doc(booking.documentId).update(booking);
   }
 }

@@ -1,9 +1,9 @@
 export interface Booking {
-  idDocument: string;
-  sallonId: string;
-  bookingHour: Date;
-  clientId: string;
-  //citizenCard
-  collaboratorId: number;
+  documentId: string;
+  client: string;
+  date: Date;
   serviceId: string;
+  //citizenCard
+  employeeId: number;
+  uidSallon: string;
 }

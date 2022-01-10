@@ -1,0 +1,33 @@
+.container {
+  .container-header {
+    display: flex;
+    margin: 1rem;
+    justify-content: space-between;
+    header {
+      color: #2196f3;
+      font-weight: bolder;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      margin-top: 0.5rem;
+      font-size: 2rem;
+    }
+    .button-container {
+      button {
+        margin: 0.5rem;
+      }
+    }
+    mat-icon {
+      margin-right: 0.3rem;
+    }
+  }
+}
+
+.mat-elevation-z8 {
+  table {
+    width: 100%;
+  }
+}
+
+td,
+th {
+  width: 25%;
+}

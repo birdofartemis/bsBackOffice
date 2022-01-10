@@ -41,7 +41,6 @@ export class ServicesComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private fs: FirestoreService,
-    private authService: AuthServiceService,
     private auth: AuthServiceService,
     private loadingService: LoadingService,
     public dialog: MatDialog,
@@ -54,7 +53,7 @@ export class ServicesComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.loadingService.updateLoading(false);
 
-    this.user$ = this.authService.getUserUID();
+    this.user$ = this.auth.getUserUID();
     this.collaboratorList$ = this.user$.pipe(switchMap((user) => this.fs.getCollaborators(user!.uid)));
 
     this.subscription.add(
