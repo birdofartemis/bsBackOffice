@@ -1,0 +1,38 @@
+.container {
+  margin-top: 1rem;
+  margin-left: 1rem;
+  display: flex;
+  background-image: url('../../../../../assets/Login-Background.jpg');
+  height: 86.8%;
+  width: auto;
+}
+
+.left-container {
+  width: 50%;
+  height: auto;
+  display: flex;
+
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  h1 {
+    font-size: 3rem;
+  }
+}
+
+.right-container {
+  width: 50%;
+  height: 100%;
+  mat-card {
+    height: 94.6%;
+    mat-form-field {
+      margin: 0.7rem;
+    }
+    .buttons-div {
+      button {
+        margin: 0.7rem;
+      }
+    }
+  }
+}

@@ -22,7 +22,6 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
   textHeader: string;
   buttonExitText: string;
   buttonConfirmText: string;
-  //collaboratorEditList!: Collaborator[];
   collaboratorList$!: Observable<Collaborator[]>;
   user$!: Observable<firebase.User | null>;
   idDocument?: string;

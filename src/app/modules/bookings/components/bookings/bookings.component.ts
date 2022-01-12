@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/compat/app';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -20,8 +22,12 @@ export class BookingsComponent implements OnInit, OnDestroy {
   user$!: Observable<firebase.User | null>;
   displayedColumns: string[];
   subscription: Subscription;
+  range = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl()
+  });
 
-  constructor(private auth: AuthServiceService, private fs: FirestoreService) {
+  constructor(private auth: AuthServiceService, private fs: FirestoreService, private router: Router, private route: ActivatedRoute) {
     this.subscription = new Subscription();
     this.displayedColumns = ['bookingHour', 'client', 'collaborator', 'service', 'price'];
   }
@@ -41,7 +47,9 @@ export class BookingsComponent implements OnInit, OnDestroy {
     );
   }
 
-  addBooking() {}
+  addBooking(): void {
+    this.router.navigate(['newbooking'], { relativeTo: this.route });
+  }
 
   getFirstServiceName(id: string, services: Service[] | null | undefined): string {
     return services?.find((service) => service.idDocument === id)?.name || '';
