@@ -1,63 +1,74 @@
 <div class="container">
   <div class="container-header">
     <header>Agendamentos</header>
-    <div class="button-container">
-      <button mat-flat-button type="button" color="primary" (click)="addBooking()">
-        <mat-icon>event</mat-icon>
-        Novo Agendamento
-      </button>
-    </div>
+    <div class="button-container"></div>
   </div>
   <div class="calendar-div">
     <mat-form-field appearance="fill">
       <mat-label>Datas das marcações</mat-label>
-      <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
-        <input matStartDate formControlName="start" placeholder="inicio" />
-        <input matEndDate formControlName="end" placeholder="fim" />
-      </mat-date-range-input>
+      <input matInput (dateInput)="filterDate($event)" [matDatepicker]="picker" />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-date-range-picker #picker></mat-date-range-picker>
-
-      <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-      <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+      <mat-datepicker touchUi #picker></mat-datepicker>
     </mat-form-field>
+
+    <button mat-flat-button type="button" color="primary" (click)="addBooking()">
+      <mat-icon>event</mat-icon>
+      Novo Agendamento
+    </button>
   </div>
 
   <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="bookingList">
+    <table mat-table [dataSource]="bookingList" matSort>
       <ng-container matColumnDef="bookingHour">
-        <th mat-header-cell *matHeaderCellDef>Hora</th>
-        <td mat-cell *matCellDef="let element">{{element.date.toDate() | date: 'HH:mm' }}</td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Agendamento</th>
+        <td mat-cell *matCellDef="let element">{{element.date.toDate() | date: 'd/M/yyyy, HH:mm' }}</td>
         <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
 
       <ng-container matColumnDef="client">
-        <th mat-header-cell *matHeaderCellDef>Cliente</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
         <td mat-cell *matCellDef="let element">{{element.client}}</td>
         <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
 
       <ng-container matColumnDef="collaborator">
-        <th mat-header-cell *matHeaderCellDef>Colaborador</th>
-        <td mat-cell *matCellDef="let element">{{getFirstCollaboratorName(element.employeeId, collaboratorList$ | async)}}</td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Colaborador</th>
+        <td mat-cell *matCellDef="let element">{{getFirstCollaboratorName(element.collaborator, collaboratorList$ | async)}}</td>
         <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
 
       <ng-container matColumnDef="service">
-        <th mat-header-cell *matHeaderCellDef>Serviço</th>
-        <td mat-cell *matCellDef="let element">{{getFirstServiceName(element.serviceId, serviceList$ | async)}}</td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Serviço</th>
+        <td mat-cell *matCellDef="let element">{{getFirstServiceName(element.service, serviceList$ | async)}}</td>
         <td mat-footer-cell *matFooterCellDef><b>Total</b></td>
       </ng-container>
 
       <ng-container matColumnDef="price">
-        <th mat-header-cell *matHeaderCellDef>Preço</th>
-        <td mat-cell *matCellDef="let element">{{getFirstServicePrice(element.serviceId, serviceList$ | async ) | currency: 'EUR'}}</td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Preço</th>
+        <td mat-cell *matCellDef="let element">{{getFirstServicePrice(element.service, serviceList$ | async ) | currency: 'EUR'}}</td>
         <td mat-footer-cell *matFooterCellDef><b>{{getTotalCost(serviceList$ | async) | currency: 'EUR'}}</b></td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Ações</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="deleteBooking($event, row)">
+              <mat-icon>delete</mat-icon>
+              <span>Apagar</span>
+            </button>
+          </mat-menu>
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
     </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>
 </div>

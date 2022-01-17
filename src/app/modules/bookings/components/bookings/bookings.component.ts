@@ -1,6 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatSort } from '@angular/material/sort';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/compat/app';
 import { Observable, Subscription } from 'rxjs';
@@ -27,9 +29,12 @@ export class BookingsComponent implements OnInit, OnDestroy {
     end: new FormControl()
   });
 
+  @ViewChild(MatTable) table!: MatTable<Booking>;
+  @ViewChild(MatSort) sort!: MatSort;
+
   constructor(private auth: AuthServiceService, private fs: FirestoreService, private router: Router, private route: ActivatedRoute) {
     this.subscription = new Subscription();
-    this.displayedColumns = ['bookingHour', 'client', 'collaborator', 'service', 'price'];
+    this.displayedColumns = ['bookingHour', 'client', 'collaborator', 'service', 'price', 'actions'];
   }
 
   ngOnInit(): void {
@@ -43,12 +48,22 @@ export class BookingsComponent implements OnInit, OnDestroy {
         .pipe(switchMap((user) => this.fs.getBookings(user!.uid)))
         .subscribe((res) => {
           this.bookingList = new MatTableDataSource(res);
+          this.bookingList.sort = this.sort;
         })
     );
   }
 
+  filterDate(event: MatDatepickerInputEvent<Date>) {
+    this.bookingList.data = this.bookingList.data.filter((x) => x.date.getDate() == event.value?.getDate());
+    this.bookingList._updateChangeSubscription();
+  }
+
   addBooking(): void {
     this.router.navigate(['newbooking'], { relativeTo: this.route });
+  }
+
+  deleteBooking(event: Event, booking: Booking) {
+    console.log(booking);
   }
 
   getFirstServiceName(id: string, services: Service[] | null | undefined): string {
@@ -66,7 +81,7 @@ export class BookingsComponent implements OnInit, OnDestroy {
   getTotalCost(services: Service[] | null | undefined): number | null {
     return (
       services
-        ?.filter((x) => this.bookingList.data.map((id) => id.serviceId).includes(x.idDocument))
+        ?.filter((x) => this.bookingList.data.map((id) => id.service).includes(x.idDocument))
         .map((service) => service.price)
         .reduce((acc, value) => acc + value, 0) || 0
     );
