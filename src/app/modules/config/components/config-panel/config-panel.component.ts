@@ -46,7 +46,9 @@ export class ConfigPanelComponent implements OnInit {
     this.dialog.open(InfoWarningComponent, {
       data: {
         title: 'Precisa de ajuda?',
-        body: 'Consulte o seguinte link:',
+        contact: '916157335',
+        email: 'marcomedeiros_03@outlook.com',
+        adress: 'Rua da Vila Nova de Cima 161, Ponta Delgada, 9500-249',
         link: 'https://www.youtube.com/channel/UCgdDo0Pj3trCNlzVRoZ05pg/featured'
       }
     });

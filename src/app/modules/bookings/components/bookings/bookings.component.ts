@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,6 +10,7 @@ import firebase from 'firebase/compat/app';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AuthServiceService, FirestoreService } from 'src/app/services';
+import { DeleteWarningComponent } from 'src/app/shared/components/delete-warning/delete-warning.component';
 import { Booking } from 'src/app/shared/model/booking.model';
 import { Collaborator } from 'src/app/shared/model/collaborator.model';
 import { Service } from 'src/app/shared/model/service.model';
@@ -32,7 +35,14 @@ export class BookingsComponent implements OnInit, OnDestroy {
   @ViewChild(MatTable) table!: MatTable<Booking>;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private auth: AuthServiceService, private fs: FirestoreService, private router: Router, private route: ActivatedRoute) {
+  constructor(
+    private auth: AuthServiceService,
+    private fs: FirestoreService,
+    private router: Router,
+    private route: ActivatedRoute,
+    public dialog: MatDialog,
+    private _snackBar: MatSnackBar
+  ) {
     this.subscription = new Subscription();
     this.displayedColumns = ['bookingHour', 'client', 'collaborator', 'service', 'price', 'actions'];
   }
@@ -53,17 +63,31 @@ export class BookingsComponent implements OnInit, OnDestroy {
     );
   }
 
-  filterDate(event: MatDatepickerInputEvent<Date>) {
-    this.bookingList.data = this.bookingList.data.filter((x) => x.date.getDate() == event.value?.getDate());
-    this.bookingList._updateChangeSubscription();
-  }
+  filterDate(event: MatDatepickerInputEvent<Date>) {}
 
   addBooking(): void {
     this.router.navigate(['newbooking'], { relativeTo: this.route });
   }
 
   deleteBooking(event: Event, booking: Booking) {
-    console.log(booking);
+    event.stopPropagation();
+    this.openDialog(booking);
+  }
+
+  private openDialog(booking: Booking): void {
+    const name = booking.client;
+    const dialofRef = this.dialog.open(DeleteWarningComponent, { data: { name: name, type: 'agendamento' } });
+
+    this.subscription.add(
+      dialofRef.afterClosed().subscribe((res) => {
+        if (res) {
+          this.fs.deleteBookingData(booking);
+          const index = this.bookingList.data.indexOf(booking);
+          this.bookingList.data.splice(index, 1);
+          this._snackBar.open(`O agendamento com o cliente ${booking.client} foi apagado com sucesso!`, 'Fechar');
+        }
+      })
+    );
   }
 
   getFirstServiceName(id: string, services: Service[] | null | undefined): string {
