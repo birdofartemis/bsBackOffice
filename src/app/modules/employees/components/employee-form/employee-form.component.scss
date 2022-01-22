@@ -1,15 +1,15 @@
 .container {
-  margin-top: 1rem;
-  margin-left: 1rem;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
   display: flex;
   background-image: url('../../../../../assets/Login-Background.jpg');
-  height: 100%;
+  height: auto;
   width: auto;
 }
 
 .left-container {
   width: 50%;
-  height: auto;
+  height: 100%;
   display: flex;
 
   text-align: center;
@@ -25,7 +25,6 @@
   width: 50%;
   height: 100%;
   mat-card {
-    height: 94.6%;
     mat-form-field {
       margin: 0.7rem;
     }

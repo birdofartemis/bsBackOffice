@@ -32,10 +32,13 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     private router: Router
   ) {
     this.subscription = new Subscription();
+
+    //Values to be used on employee-form component html
     this.isEdit = false;
     this.textHeader = 'Novo Colaborador';
     this.buttonExitText = 'Voltar';
     this.buttonConfirmText = 'Adicionar Funcionário';
+
     this.collaboratorForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -47,12 +50,14 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription.add(
+      //Verifies if it carries an id in the url
       this.route.params
         .pipe(
           filter(({ id }) => !!id),
           switchMap(({ id }) => this.fs.getCollaborator(id))
         )
         .subscribe((collaborator) => {
+          //If it carries, it patch the form with the data of the collaborator
           this.collaboratorForm.patchValue(collaborator.data()!);
           this.isEdit = true;
 
@@ -63,17 +68,21 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     );
   }
 
+  //add collaborator on firestore
   addCollaborator(event: Event, collaborator: Collaborator): void {
     event.stopPropagation();
     this.subscription.add(
       this.auth.getUserUID().subscribe(
+        //sucess
         (res) => {
+          //patch value uidSalon with user id (primary key)
           collaborator.uidSallon = res!.uid;
           this.fs.addCollaboratorData(collaborator);
           this.collaboratorForm.reset();
           this._snackBar.open('Adicionado com sucesso!', 'Fechar');
         },
 
+        //error
         () => {
           this._snackBar.open('Erro ao adicionar!', 'Fechar');
         }
@@ -81,6 +90,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     );
   }
 
+  //Update on firestore an collaborator
   editCollaborator(event: Event, collaborator: Collaborator): void {
     event.stopPropagation();
     this.fs.updateCollaborator(collaborator);

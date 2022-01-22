@@ -15,19 +15,26 @@
         margin: 0.5rem;
       }
     }
-    mat-icon {
-      margin-right: 0.3rem;
+  }
+
+  main {
+    margin: 0rem 2rem 2rem 2rem;
+    .mat-elevation-z8 {
+      mat-form-field {
+        font-size: 14px;
+        width: 100%;
+      }
+      table {
+        width: 100%;
+      }
+    }
+
+    td,
+    th {
+      width: 25%;
     }
   }
-}
-
-.mat-elevation-z8 {
-  table {
-    width: 100%;
+  mat-icon {
+    margin-right: 0.3rem;
   }
-}
-
-td,
-th {
-  width: 25%;
 }
