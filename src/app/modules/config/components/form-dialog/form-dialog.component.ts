@@ -21,7 +21,9 @@ export class FormDialogComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  updateLoginData(user: { email: string; newEmail: string; password: string }) {
+  //Updates user email account in authentication of firebase
+  updateLoginData(event: Event, user: { email: string; newEmail: string; password: string }) {
+    event.stopPropagation();
     this.auth.updateUserEmail(user).subscribe(
       () => {
         this._snackBar.open('Alteração executada com sucesso', 'Fechar');

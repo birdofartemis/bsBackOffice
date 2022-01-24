@@ -22,6 +22,7 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
   textHeader: string;
   buttonExitText: string;
   buttonConfirmText: string;
+
   collaboratorList$!: Observable<Collaborator[]>;
   user$!: Observable<firebase.User | null>;
   idDocument?: string;
@@ -35,10 +36,12 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute
   ) {
     this.subscription = new Subscription();
+    //Values to be used on service-form component html
     this.isEdit = false;
     this.textHeader = 'Novo Serviço';
     this.buttonExitText = 'Voltar';
     this.buttonConfirmText = 'Adicionar Serviço';
+
     this.serviceForm = this.fb.group({
       name: ['', Validators.required],
       price: ['0.00', [Validators.required, Validators.min(0.01)]],
@@ -50,13 +53,14 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.user$ = this.authService.getUserUID();
     this.collaboratorList$ = this.user$.pipe(switchMap((user) => this.fs.getCollaborators(user!.uid)));
-
     this.subscription.add(
       this.route.params
         .pipe(
+          //Verifies if it carries an id in the url
           filter(({ id }) => !!id),
           switchMap(({ id }) => this.fs.getService(id)),
           tap((service: ServiceDoc) => {
+            //If it carries, it patch the form with the data of the service
             const values = service.data();
             this.serviceForm.patchValue(values || {});
             this.idDocument = values?.idDocument;
@@ -71,6 +75,33 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
     );
   }
 
+  //add service on firestore
+  addService(event: Event, formValue: Service, user: firebase.User | null): void {
+    event.stopPropagation();
+    //String array of collaborator's ids or empty array if lenght is equal to zero
+    const collaboratorIdList = formValue?.collaborator?.length ? formValue?.collaborator : [];
+    //Adds do service object the collaborator's ids or an empty array
+    const service: Service = { ...formValue, collaborator: collaboratorIdList };
+    this.subscription.add(
+      this.fs.addServiceData({ ...service, uidSallon: user!.uid }).subscribe(
+        //sucess
+        (res) => {
+          //Adds idDocument to the service object to work as an id
+          this.fs.updateServiceData({ ...service, idDocument: res.id });
+          //Reset html form
+          this.serviceForm.reset();
+          //Opens html an html informative snack bar
+          this._snackBar.open('Adicionado com sucesso!', 'Fechar');
+        },
+        //error
+        () => {
+          //Opens html an html informative snack bar
+          this._snackBar.open('Erro ao adicionar!', 'Fechar');
+        }
+      )
+    );
+  }
+  //Update on firestore an collaborator
   editService(event: Event, service: Service): void {
     event.stopPropagation();
     service.idDocument = this.idDocument || '';
@@ -86,6 +117,7 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  //Stores image
   imageChanged(imageInput: { files: File[] }): void {
     const file = imageInput.files[0];
 
@@ -107,29 +139,12 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
 
     // if (this.resourceForm.get('_id').value) this.store.dispatch(updatePicture({ id: this.resourceForm.get('_id').value as string, file }));
   }
-
+  //event when image change
   changeImage(): void {
     document!.getElementById('image')!.click();
   }
 
-  addService(event: Event, formValue: Service, user: firebase.User | null): void {
-    event.stopPropagation();
-    const service: Service = { ...formValue, collaborator: formValue?.collaborator?.length ? formValue?.collaborator : [] };
-    this.subscription.add(
-      this.fs.addServiceData({ ...service, uidSallon: user!.uid }).subscribe(
-        (res) => {
-          this.fs.updateServiceData({ ...service, idDocument: res.id });
-
-          this.serviceForm.reset();
-          this._snackBar.open('Adicionado com sucesso!', 'Fechar');
-        },
-        () => {
-          this._snackBar.open('Erro ao adicionar!', 'Fechar');
-        }
-      )
-    );
-  }
-
+  //Used on Html to get collaborators name through  citizen's card
   getFirstCollaboratorName(cc: string, collab: Collaborator[] | null | undefined): string {
     return collab?.find((collab) => collab.citizenCard === cc)?.name || '';
   }

@@ -76,14 +76,16 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
         //sucess
         (res) => {
           //patch value uidSalon with user id (primary key)
-          collaborator.uidSallon = res!.uid;
-          this.fs.addCollaboratorData(collaborator);
+          this.fs.addCollaboratorData({ ...collaborator, uidSallon: res!.uid });
+          //Reset html form
           this.collaboratorForm.reset();
+          //Opens html an html informative snack bar
           this._snackBar.open('Adicionado com sucesso!', 'Fechar');
         },
 
         //error
         () => {
+          //Opens html an html informative snack bar
           this._snackBar.open('Erro ao adicionar!', 'Fechar');
         }
       )
@@ -94,10 +96,13 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   editCollaborator(event: Event, collaborator: Collaborator): void {
     event.stopPropagation();
     this.fs.updateCollaborator(collaborator);
+
     this._snackBar.open('Atualizado com sucesso!', 'Fechar');
+    //Redirects to employee component
     this.router.navigate(['/home/employees'], { relativeTo: this.route });
   }
 
+  //Stores image
   imageChanged(imageInput: { files: File[] }): void {
     const file = imageInput.files[0];
 
@@ -120,6 +125,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     // if (this.resourceForm.get('_id').value) this.store.dispatch(updatePicture({ id: this.resourceForm.get('_id').value as string, file }));
   }
 
+  //event when image change
   changeImage(): void {
     document!.getElementById('image')!.click();
   }

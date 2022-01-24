@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -34,6 +35,7 @@ export class BookingsComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatTable) table!: MatTable<Booking>;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private auth: AuthServiceService,
@@ -59,6 +61,7 @@ export class BookingsComponent implements OnInit, OnDestroy {
         .subscribe((res) => {
           this.bookingList = new MatTableDataSource(res);
           this.bookingList.sort = this.sort;
+          this.bookingList.paginator = this.paginator;
         })
     );
   }

@@ -92,7 +92,7 @@ export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {
     this.router.navigate(['newemployee'], { relativeTo: this.route });
   }
 
-  //Redirect to employee-form component and adds to url the collaborator's citizen card
+  //Redirect to employee-form component and adds to url the collaborator's citizen card (id)
   editColaborator(event: Event, collaborator: Collaborator): void {
     event.stopPropagation();
     void this.router.navigate(['newemployee', collaborator.citizenCard], { relativeTo: this.route });
@@ -120,6 +120,7 @@ export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {
           const index = this.dataSource.data.indexOf(employee);
           this.dataSource.data.splice(index, 1);
           this.dataSource._updateChangeSubscription();
+          //Html informative snackBar element is opened
           this._snackBar.open(`${employee.name} foi apagado com sucesso!`, 'Fechar');
         }
       })

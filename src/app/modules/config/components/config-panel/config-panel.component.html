@@ -8,11 +8,11 @@
       <mat-divider></mat-divider>
       <a (click)="editUserData($event)"><mat-list-option>Alterar dados do Salão ou Barbearia?</mat-list-option></a>
       <mat-divider></mat-divider>
-      <a (click)="openFormDialog()"><mat-list-option>Mudar email?</mat-list-option></a>
+      <a (click)="openFormDialog($event)"><mat-list-option>Mudar email?</mat-list-option></a>
       <mat-divider></mat-divider>
       <a routerLink="/signin" routerLinkActive="active"><mat-list-option>Cancelar ou alterar plano de pagamento?</mat-list-option></a>
       <mat-divider></mat-divider>
-      <a (click)="openInfoDialog()"><mat-list-option>Ajuda?</mat-list-option></a>
+      <a (click)="openInfoDialog($event)"><mat-list-option>Ajuda?</mat-list-option></a>
       <mat-divider></mat-divider>
       <mat-list-option
         ><mat-slide-toggle color="primary" [(ngModel)]="isTgButtonChecked" (change)="onDarkModeSwitched($event)"

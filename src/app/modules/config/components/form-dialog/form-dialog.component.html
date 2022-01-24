@@ -32,7 +32,7 @@
     mat-button
     cdkFocusInitial
     [disabled]="configEmailForm.invalid"
-    (click)="updateLoginData(configEmailForm.value)"
+    (click)="updateLoginData($event, configEmailForm.value)"
     [matDialogClose]=""
   >
     Concluir
