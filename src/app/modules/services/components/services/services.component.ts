@@ -64,7 +64,7 @@ export class ServicesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.user$ = this.auth.getUserUID();
     this.collaboratorList$ = this.user$.pipe(switchMap((user) => this.fs.getCollaborators(user!.uid)));
 
-    //Process service list data using uid of salon and implementing sort
+    //Process service list data using uid of salon and implementing sort and paginator
     this.subscription.add(
       this.auth
         .getUserUID()

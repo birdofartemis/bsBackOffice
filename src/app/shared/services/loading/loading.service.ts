@@ -13,6 +13,7 @@ export class LoadingService {
     this.isDarkTheme$ = new BehaviorSubject<boolean>(false);
   }
 
+  //Progress loading bar
   getLoadingState(): Observable<boolean> {
     return this.loading$;
   }
@@ -21,6 +22,7 @@ export class LoadingService {
     this.loading$.next(value);
   }
 
+  //Dark-Theme
   getIsDarkTheme(): Observable<boolean> {
     return this.isDarkTheme$;
   }

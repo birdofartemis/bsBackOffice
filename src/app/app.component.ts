@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
     this.isDarkTheme$.subscribe((value) => (this.isDark = value));
   }
 
+  //Loads theme
   @HostBinding('class')
   get themeMode() {
     let hostClass = this.isDark ? 'theme-dark' : 'theme-light';
@@ -30,9 +31,5 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading$ = this.loadingService.getLoadingState();
-  }
-
-  switchMode(event: Event) {
-    console.log(event);
   }
 }

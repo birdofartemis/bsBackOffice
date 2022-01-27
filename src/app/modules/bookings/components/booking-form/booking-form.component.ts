@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import firebase from 'firebase/compat/app';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AuthServiceService, FirestoreService } from 'src/app/services';
 import { Booking } from 'src/app/shared/model/booking.model';
@@ -14,15 +14,19 @@ import { Service } from 'src/app/shared/model/service.model';
   templateUrl: './booking-form.component.html',
   styleUrls: ['./booking-form.component.scss']
 })
-export class BookingFormComponent implements OnInit {
+export class BookingFormComponent implements OnInit, OnDestroy {
+  subscription: Subscription;
   bookingForm: FormGroup;
   idDocument?: string;
 
+  //Observables
   collaboratorList$!: Observable<Collaborator[]>;
   serviceList$!: Observable<Service[]>;
   user$!: Observable<firebase.User | null>;
 
   constructor(private fb: FormBuilder, private fs: FirestoreService, private auth: AuthServiceService, private _snackBar: MatSnackBar) {
+    this.subscription = new Subscription();
+
     this.bookingForm = this.fb.group({
       client: ['', Validators.required],
       date: ['', Validators.required],
@@ -33,6 +37,7 @@ export class BookingFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //Not loaded data (streams)
     this.user$ = this.auth.getUserUID();
     this.collaboratorList$ = this.user$.pipe(switchMap((user) => this.fs.getCollaborators(user!.uid)));
     this.serviceList$ = this.user$.pipe(switchMap((user) => this.fs.getServices(user!.uid)));
@@ -42,18 +47,31 @@ export class BookingFormComponent implements OnInit {
     event.stopPropagation();
 
     let time = this.bookingForm.get('hour')!.value.split(':');
+    //Now date will have the correct hour and minutes
     formValue.date.setHours(time[0], time[1]);
+    //Separating hours from the object that will be send to firestore
     const { hour, ...other } = formValue;
-    this.fs.addBookingData({ ...other, uidSallon: user!.uid }).subscribe(
-      (res) => {
-        this.fs.updateBookingData({ ...other, documentId: res.id });
-
-        this.bookingForm.reset();
-        this._snackBar.open('Adicionado com sucesso!', 'Fechar');
-      },
-      () => {
-        this._snackBar.open('Erro ao adicionar!', 'Fechar');
-      }
+    //
+    this.subscription.add(
+      this.fs.addBookingData({ ...other, uidSallon: user!.uid }).subscribe(
+        //sucess
+        (res) => {
+          //Adds idDocument to the booking object to work as an id
+          this.fs.updateBookingData({ ...other, documentId: res.id });
+          //Reset html form
+          this.bookingForm.reset();
+          //Opens html an html informative snack bar
+          this._snackBar.open('Adicionado com sucesso!', 'Fechar');
+        },
+        //error
+        () => {
+          //Opens html an html informative snack bar
+          this._snackBar.open('Erro ao adicionar!', 'Fechar');
+        }
+      )
     );
+  }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

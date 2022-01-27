@@ -7,7 +7,7 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [opened]="(isHandset$ | async) === false"
   >
-    <mat-toolbar color="primary">Menu</mat-toolbar>
+    <mat-toolbar color="primary">{{ salonName }}</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item routerLink="/home"> <mat-icon>home</mat-icon>Dashboard </a>
       <a mat-list-item routerLink="/home/bookings"><mat-icon>event</mat-icon>Agendamentos</a>

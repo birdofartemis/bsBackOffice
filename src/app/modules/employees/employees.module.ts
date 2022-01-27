@@ -12,13 +12,12 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 
-import { DeleteWarningComponent } from '../../shared/components/delete-warning/delete-warning.component';
 import { EmployeeFormComponent } from './components/employee-form/employee-form.component';
 import { EmployeesComponent } from './components/employees/employees.component';
 import { EmployeesRoutingModule } from './employees-routing.module';
 
 @NgModule({
-  declarations: [EmployeeFormComponent, EmployeesComponent, DeleteWarningComponent],
+  declarations: [EmployeeFormComponent, EmployeesComponent],
   imports: [
     CommonModule,
     EmployeesRoutingModule,

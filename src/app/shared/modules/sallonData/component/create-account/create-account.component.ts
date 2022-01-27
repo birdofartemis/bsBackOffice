@@ -53,11 +53,13 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
           filter(({ id }) => !!id),
           switchMap(({ id }) => this.fs.getUserData(id)),
           tap((user: UserDoc) => {
+            //if the url contains the id of salon it will patch the form
             const values = user.data();
             this.signForm.patchValue(values || {});
 
             this.isEdit = true;
 
+            //Clear validation to email and password if is an edit
             this.clearValidators(this.signForm.get('email'));
             this.clearValidators(this.signForm.get('password'));
             this.clearValidators(this.signForm.get('passwordConfirmation'));
@@ -65,7 +67,9 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
         )
         .subscribe()
     );
+    //If doesn't carries id salon on url
     this.subscription.add(
+      //Listenner on password
       this.signForm.get('password')?.valueChanges.subscribe(() => {
         this.signForm.get('passwordConfirmation')?.updateValueAndValidity();
       })
@@ -77,12 +81,13 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
     control?.clearValidators();
     control?.updateValueAndValidity();
   }
-
+  //Create account
   signIn(user: User): void {
     this.loadingService.updateLoading(true);
     this.authService.signUp(user).subscribe(
       //Sucess
       () => {
+        //Redirects to home page
         this.router.navigate(['home'], { relativeTo: this.route });
         this.loadingService.updateLoading(false);
       },
@@ -94,14 +99,18 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
     );
   }
 
+  //Update data user on firestore
   editUserData(user: User): void {
     this.loadingService.updateLoading(true);
+
     this.authService.getUserUID().subscribe((userLogged) => {
       if (userLogged?.uid) {
+        //Update user data and redirects to home page
         this.fs.updateUserData(user, userLogged!.uid);
         this._snackBar.open('Alterações executadas com sucesso', 'Fechar');
         this.router.navigate(['/home'], { relativeTo: this.route });
       } else {
+        //Redirects to login Page
         this._snackBar.open('Conta não reconhecida', 'Fechar');
         this.router.navigate(['/'], { relativeTo: this.route });
       }
@@ -109,8 +118,10 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
     this.loadingService.updateLoading(false);
   }
 
+  //Function that will return an error or null
   validatePassword(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null =>
+      //Condition of the custom Validador
       control?.parent?.get('password')?.value === control.value ? null : { diffPassword: control.value };
   }
 
