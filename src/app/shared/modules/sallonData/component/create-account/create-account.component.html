@@ -42,16 +42,16 @@
           <div class="form-enterprise">
             <mat-form-field>
               <mat-label>Nome da Empresa</mat-label>
-              <input matInput type="text" required formControlName="enterprise" />
-              <mat-error *ngIf="signForm?.get('name')?.errors?.required">Field is required</mat-error>
+              <input matInput type="text" required formControlName="enterpriseName" />
+              <mat-error *ngIf="signForm?.get('enterpriseName')?.errors?.required">Field is required</mat-error>
             </mat-form-field>
           </div>
 
           <div class="form-enterprise-data">
             <mat-form-field>
               <mat-label>Telefone</mat-label>
-              <input matInput type="number" required formControlName="phoneNumber" />
-              <mat-error *ngIf="signForm?.get('phoneNumber')?.errors?.required">Field is required</mat-error>
+              <input matInput type="number" required formControlName="telephone" />
+              <mat-error *ngIf="signForm?.get('telephone')?.errors?.required">Field is required</mat-error>
             </mat-form-field>
 
             <mat-form-field>

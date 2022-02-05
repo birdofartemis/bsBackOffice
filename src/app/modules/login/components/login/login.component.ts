@@ -10,7 +10,7 @@ import { LoadingService } from 'src/app/shared/services/loading/loading.service'
 import { RecoverPasswordComponent } from '../recover-password/recover-password.component';
 
 export interface Auth {
-  username: string;
+  email: string;
   password: string;
   logged: boolean;
 }
@@ -38,7 +38,7 @@ export class LoginComponent implements OnDestroy {
     this.subscription = new Subscription();
 
     this.authForm = this.fb.group({
-      username: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       logged: false
     });
@@ -50,7 +50,7 @@ export class LoginComponent implements OnDestroy {
     this.loadingService.updateLoading(true);
 
     this.subscription.add(
-      this.authService.logInAuth(value.username, value.password).subscribe(
+      this.authService.logInAuth(value.email, value.password).subscribe(
         // Success
         () => {
           this.loadingService.updateLoading(false);

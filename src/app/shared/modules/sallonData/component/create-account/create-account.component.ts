@@ -38,9 +38,9 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       passwordConfirmation: ['', [Validators.required, this.validatePassword()]],
-      enterprise: ['', Validators.required],
+      enterpriseName: ['', Validators.required],
       postalCode: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
+      telephone: ['', Validators.required],
       name: ['', Validators.required],
       termsConditions: ['', [Validators.required, Validators.requiredTrue]]
     });

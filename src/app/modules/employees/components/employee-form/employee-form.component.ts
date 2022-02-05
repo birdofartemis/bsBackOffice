@@ -76,7 +76,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
         //sucess
         (res) => {
           //patch value uidSalon with user id (primary key)
-          this.fs.addCollaboratorData({ ...collaborator, uidSallon: res!.uid });
+          this.fs.addCollaboratorData({ ...collaborator, uidSalon: res!.uid });
           //Reset html form
           this.collaboratorForm.reset();
           //Opens html an html informative snack bar

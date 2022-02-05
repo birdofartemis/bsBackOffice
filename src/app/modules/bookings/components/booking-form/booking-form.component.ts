@@ -17,7 +17,7 @@ import { Service } from 'src/app/shared/model/service.model';
 export class BookingFormComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   bookingForm: FormGroup;
-  idDocument?: string;
+  minDate: Date;
 
   //Observables
   collaboratorList$!: Observable<Collaborator[]>;
@@ -26,13 +26,14 @@ export class BookingFormComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder, private fs: FirestoreService, private auth: AuthServiceService, private _snackBar: MatSnackBar) {
     this.subscription = new Subscription();
+    this.minDate = new Date();
 
     this.bookingForm = this.fb.group({
       client: ['', Validators.required],
       date: ['', Validators.required],
       hour: ['', Validators.required],
-      service: ['', [Validators.required]],
-      collaborator: ['', [Validators.required]]
+      serviceId: ['', [Validators.required]],
+      collaboratorId: ['', [Validators.required]]
     });
   }
 
@@ -53,7 +54,7 @@ export class BookingFormComponent implements OnInit, OnDestroy {
     const { hour, ...other } = formValue;
     //
     this.subscription.add(
-      this.fs.addBookingData({ ...other, uidSallon: user!.uid }).subscribe(
+      this.fs.addBookingData({ ...other, uidSalon: user!.uid }).subscribe(
         //sucess
         (res) => {
           //Adds idDocument to the booking object to work as an id

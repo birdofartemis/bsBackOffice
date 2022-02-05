@@ -29,7 +29,7 @@ export class MenuComponent {
       .getUserUID()
       .pipe(switchMap((user) => this.fs.getUserData(user!.uid)))
       .subscribe((res) => {
-        this.salonName = res.data()!.enterprise;
+        this.salonName = res.data()!.enterpriseName;
       });
   }
 

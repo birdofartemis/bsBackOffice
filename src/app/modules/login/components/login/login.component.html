@@ -14,8 +14,8 @@
       <form [formGroup]="authForm">
         <mat-form-field>
           <mat-label>Email</mat-label>
-          <input matInput type="email" required formControlName="username" />
-          <mat-error *ngIf="authForm?.get('username')?.errors?.required">Field is required</mat-error>
+          <input matInput type="email" required formControlName="email" />
+          <mat-error *ngIf="authForm?.get('email')?.errors?.required">Field is required</mat-error>
         </mat-form-field>
 
         <mat-form-field>
@@ -30,7 +30,7 @@
         <div class="checkbox-logged">
           <mat-label>Manter-me logado no Sistema </mat-label>
           <mat-checkbox color="primary" formControlName="logged"></mat-checkbox>
-          <a (click)="recoverPassword($event, authForm?.get('username')?.value)">Recuperar palavra-passe </a>
+          <a (click)="recoverPassword($event, authForm?.get('email')?.value)">Recuperar palavra-passe </a>
         </div>
       </form>
     </mat-card-content>

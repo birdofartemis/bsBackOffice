@@ -25,7 +25,7 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
 
   collaboratorList$!: Observable<Collaborator[]>;
   user$!: Observable<firebase.User | null>;
-  idDocument?: string;
+  documentId?: string;
 
   constructor(
     private fb: FormBuilder,
@@ -63,7 +63,7 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
             //If it carries, it patch the form with the data of the service
             const values = service.data();
             this.serviceForm.patchValue(values || {});
-            this.idDocument = values?.idDocument;
+            this.documentId = values?.documentId;
 
             this.isEdit = true;
             this.textHeader = 'Editar Serviço';
@@ -79,15 +79,15 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
   addService(event: Event, formValue: Service, user: firebase.User | null): void {
     event.stopPropagation();
     //String array of collaborator's ids or empty array if lenght is equal to zero
-    const collaboratorIdList = formValue?.collaborator?.length ? formValue?.collaborator : [];
+    const collaboratorIdList = formValue?.collaboratorIdList?.length ? formValue?.collaboratorIdList : [];
     //Adds do service object the collaborator's ids or an empty array
-    const service: Service = { ...formValue, collaborator: collaboratorIdList };
+    const service: Service = { ...formValue, collaboratorIdList: collaboratorIdList };
     this.subscription.add(
       this.fs.addServiceData({ ...service, uidSallon: user!.uid }).subscribe(
         //sucess
         (res) => {
           //Adds idDocument to the service object to work as an id
-          this.fs.updateServiceData({ ...service, idDocument: res.id });
+          this.fs.updateServiceData({ ...service, documentId: res.id });
           //Reset html form
           this.serviceForm.reset();
           //Opens html an html informative snack bar
@@ -104,9 +104,9 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
   //Update on firestore an collaborator
   editService(event: Event, service: Service): void {
     event.stopPropagation();
-    service.idDocument = this.idDocument || '';
+    service.documentId = this.documentId || '';
 
-    if (service.idDocument) {
+    if (service.documentId) {
       //success
       this.fs.updateServiceData(service);
       this._snackBar.open('Atualizado com sucesso!', 'Fechar');

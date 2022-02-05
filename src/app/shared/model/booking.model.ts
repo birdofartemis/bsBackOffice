@@ -3,8 +3,8 @@ export interface Booking {
   client: string;
   date: Date;
   hour?: string;
-  service: string; //id
+  serviceId: string; //id
   //citizenCard
-  collaborator: number; //id
-  uidSallon: string;
+  collaboratorId: number; //id
+  uidSalon: string;
 }

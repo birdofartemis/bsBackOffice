@@ -1,6 +1,6 @@
 export interface Collaborator {
   url?: string;
-  uidSallon: string;
+  uidSalon: string;
   name: string;
   email: string;
   telephone: string;

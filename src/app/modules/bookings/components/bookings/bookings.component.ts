@@ -104,12 +104,12 @@ export class BookingsComponent implements OnInit, OnDestroy {
   }
   //This function is called on html and return the name of a service using is idDocument
   getFirstServiceName(id: string, services: Service[] | null | undefined): string {
-    return services?.find((service) => service.idDocument === id)?.name || '';
+    return services?.find((service) => service.documentId === id)?.name || '';
   }
 
   //This function is called on html and return the price of a service using is idDocument
   getFirstServicePrice(id: string, services: Service[] | null | undefined): number {
-    return services?.find((service) => service.idDocument === id)?.price || 0.0;
+    return services?.find((service) => service.documentId === id)?.price || 0.0;
   }
   //This function is called on html and return the name of a collaborator using is citizen card
   getFirstCollaboratorName(cc: string, collab: Collaborator[] | null | undefined): string {
@@ -119,7 +119,7 @@ export class BookingsComponent implements OnInit, OnDestroy {
   getTotalCost(services: Service[] | null | undefined): number | null {
     return (
       services
-        ?.filter((x) => this.bookingList.data.map((id) => id.service).includes(x.idDocument))
+        ?.filter((x) => this.bookingList.data.map((id) => id.serviceId).includes(x.documentId))
         .map((service) => service.price)
         .reduce((acc, value) => acc + value, 0) || 0
     );

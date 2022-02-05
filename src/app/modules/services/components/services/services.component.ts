@@ -70,6 +70,7 @@ export class ServicesComponent implements OnInit, OnDestroy, AfterViewInit {
         .getUserUID()
         .pipe(switchMap((user) => this.fs.getServices(user!.uid)))
         .subscribe((res) => {
+          res.sort((a, b) => b.price - a.price);
           this.serviceList = new MatTableDataSource(res);
           this.serviceList.sort = this.sort;
           this.serviceList.paginator = this.paginator;
@@ -92,7 +93,7 @@ export class ServicesComponent implements OnInit, OnDestroy, AfterViewInit {
   //Redirect to service-form component and adds to url the service's document id
   editService(event: Event, service: Service): void {
     event.stopPropagation();
-    void this.router.navigate(['newservice', service.idDocument], { relativeTo: this.route });
+    void this.router.navigate(['newservice', service.documentId], { relativeTo: this.route });
   }
 
   //Open dialog do confirm the deletion
@@ -112,7 +113,7 @@ export class ServicesComponent implements OnInit, OnDestroy, AfterViewInit {
         //Res can be true if the user confirm the deletion or null
         if (res) {
           //Deletes the service on firestore
-          this.fs.deleteServiceData(service.idDocument);
+          this.fs.deleteServiceData(service.documentId);
           //Updates service's table
           const index = this.serviceList.data.indexOf(service);
           this.serviceList.data.splice(index, 1);

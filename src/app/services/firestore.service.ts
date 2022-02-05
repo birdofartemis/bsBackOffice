@@ -61,12 +61,12 @@ export class FirestoreService {
     return from(this.db.collection('services').add({ ...service }));
   }
 
-  deleteServiceData(idDocument: string): void {
-    this.db.collection('services').doc(idDocument).delete();
+  deleteServiceData(documentId: string): void {
+    this.db.collection('services').doc(documentId).delete();
   }
 
   updateServiceData(service: Service): void {
-    this.db.collection('services').doc(service.idDocument).update(service);
+    this.db.collection('services').doc(service.documentId).update(service);
   }
 
   getServices(userUID: string): Observable<Service[]> {
@@ -94,7 +94,7 @@ export class FirestoreService {
 
   getBookings(userUID: string): Observable<Booking[]> {
     const ref = this.db.collection('bookings').ref as CollectionReference<Booking>;
-    return from(ref.where('uidSallon', '==', userUID).get()).pipe(map((res) => res.docs.map((value) => value.data())));
+    return from(ref.orderBy('date').where('uidSalon', '==', userUID).get()).pipe(map((res) => res.docs.map((value) => value.data())));
   }
 
   getBooking({ documentId }: Booking) {

@@ -20,12 +20,12 @@
 
             <mat-form-field appearance="fill" class="example-form-field">
               <mat-label>Data do Agendamento</mat-label>
-              <input matInput [matDatepicker]="datepicker" required formControlName="date" />
+              <input matInput [matDatepicker]="datepicker" [min]="minDate" required formControlName="date" />
               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
               <mat-datepicker #datepicker>
                 <mat-datepicker-actions>
-                  <button mat-button matDatepickerCancel>Cancel</button>
-                  <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+                  <button mat-button matDatepickerCancel>Cancelar</button>
+                  <button mat-raised-button color="primary" matDatepickerApply>Aplicar</button>
                 </mat-datepicker-actions>
               </mat-datepicker>
             </mat-form-field>
@@ -40,14 +40,14 @@
           <div class="form-booking-data">
             <mat-form-field appearance="fill" *ngIf="{'data': serviceList$ | async} as services">
               <mat-label>Escolha um serviço</mat-label>
-              <mat-select formControlName="service">
-                <mat-option *ngFor="let service of services.data" [value]="service.idDocument">{{ service.name }}</mat-option>
+              <mat-select formControlName="serviceId">
+                <mat-option *ngFor="let service of services.data" [value]="service.documentId">{{ service.name }}</mat-option>
               </mat-select>
             </mat-form-field>
 
             <mat-form-field appearance="fill" *ngIf="{'data': collaboratorList$ | async} as collaborators">
               <mat-label>Escolha um colaborador</mat-label>
-              <mat-select formControlName="collaborator">
+              <mat-select formControlName="collaboratorId">
                 <mat-option *ngFor="let collaborator of collaborators.data" [value]="collaborator.citizenCard"
                   >{{ collaborator.name }}</mat-option
                 >

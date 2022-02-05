@@ -1,17 +1,17 @@
 import { Collaborator } from './collaborator.model';
 
 export interface Service {
-  idDocument: string;
+  documentId: string;
   url?: string;
   name: string;
   price: number;
   description: string;
-  collaborator: string[];
+  collaboratorIdList: string[];
   uidSallon: string;
 }
 
-export interface ServiceForm extends Omit<Service, 'collaborator'> {
-  collaborator: Collaborator[];
+export interface ServiceForm extends Omit<Service, 'collaboratorIdList'> {
+  collaboratorIdList: Collaborator[];
 }
 
 export type ServiceDoc = firebase.default.firestore.DocumentSnapshot<Service>;
