@@ -46,6 +46,13 @@
           <td mat-cell *matCellDef="let element">{{element.taxIdNumber}}</td>
         </ng-container>
 
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-icon>{{element.status === 'Disponível' ? 'check' : 'clear'}}</mat-icon>{{element.status}}
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Ações</th>
           <td mat-cell *matCellDef="let row">
@@ -53,6 +60,10 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="changeStatus($event, row)">
+                <mat-icon>{{row.status === 'Disponível' ? 'mood_bad' : 'mood'}}</mat-icon>
+                <span>{{row.status === 'Disponível' ? 'Ausente' : 'Disponível'}}</span>
+              </button>
               <button mat-menu-item (click)="editColaborator($event, row)">
                 <mat-icon>edit</mat-icon>
                 <span>Editar</span>

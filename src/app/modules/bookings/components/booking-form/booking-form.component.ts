@@ -21,6 +21,7 @@ export class BookingFormComponent implements OnInit, OnDestroy {
 
   //Observables
   collaboratorList$!: Observable<Collaborator[]>;
+  filteredCollaboratorList$!: Observable<Collaborator[]>;
   serviceList$!: Observable<Service[]>;
   user$!: Observable<firebase.User | null>;
 
@@ -41,7 +42,21 @@ export class BookingFormComponent implements OnInit, OnDestroy {
     //Not loaded data (streams)
     this.user$ = this.auth.getUserUID();
     this.collaboratorList$ = this.user$.pipe(switchMap((user) => this.fs.getCollaborators(user!.uid)));
+    this.filteredCollaboratorList$ = this.collaboratorList$;
     this.serviceList$ = this.user$.pipe(switchMap((user) => this.fs.getServices(user!.uid)));
+  }
+
+  filterCollaboratorList(event: EventListener): void {
+    if (event) {
+      this.bookingForm?.get('collaboratorId')?.reset();
+      this.bookingForm?.get('collaboratorId')?.updateValueAndValidity();
+
+      this.filteredCollaboratorList$ = this.fs
+        .getService(event.toString())
+        .pipe(switchMap((service) => this.fs.getCollaboratorsFromService(service.data()!.collaboratorIdList)));
+    } else {
+      this.filteredCollaboratorList$ = this.collaboratorList$;
+    }
   }
 
   addBooking(event: Event, formValue: Booking, user: firebase.User | null): void {
@@ -49,7 +64,7 @@ export class BookingFormComponent implements OnInit, OnDestroy {
 
     let time = this.bookingForm.get('hour')!.value.split(':');
     //Now date will have the correct hour and minutes
-    formValue.date.setHours(time[0], time[1]);
+    (formValue.date as Date).setHours(time[0], time[1]);
     //Separating hours from the object that will be send to firestore
     const { hour, ...other } = formValue;
     //

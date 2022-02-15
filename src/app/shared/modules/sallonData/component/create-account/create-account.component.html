@@ -82,19 +82,18 @@
             <mat-checkbox color="primary" formControlName="termsConditions"></mat-checkbox>
           </div>
         </form>
+        <mat-card-actions>
+          <button
+            mat-flat-button
+            type="button"
+            color="primary"
+            [disabled]="signForm.invalid"
+            (click)="!isEdit ? signIn(signForm?.value) : editUserData(signForm?.value)"
+          >
+            Concluir
+          </button>
+        </mat-card-actions>
       </mat-card-content>
-
-      <mat-card-actions>
-        <button
-          mat-flat-button
-          type="button"
-          color="primary"
-          [disabled]="signForm.invalid"
-          (click)="!isEdit ? signIn(signForm?.value) : editUserData(signForm?.value)"
-        >
-          Concluir
-        </button>
-      </mat-card-actions>
     </mat-card>
   </div>
 </div>

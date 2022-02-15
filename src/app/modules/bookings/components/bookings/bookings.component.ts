@@ -7,6 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/compat/app';
+import { Timestamp } from 'firebase/firestore';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AuthServiceService, FirestoreService } from 'src/app/services';
@@ -22,9 +23,11 @@ import { Service } from 'src/app/shared/model/service.model';
 })
 export class BookingsComponent implements OnInit, OnDestroy {
   subscription: Subscription;
+  minDate: Date;
 
   //Observables
   bookingList!: MatTableDataSource<Booking>;
+  bookingListFiltered!: MatTableDataSource<Booking>;
   collaboratorList$!: Observable<Collaborator[]>;
   serviceList$!: Observable<Service[]>;
   user$!: Observable<firebase.User | null>;
@@ -46,6 +49,7 @@ export class BookingsComponent implements OnInit, OnDestroy {
     private _snackBar: MatSnackBar
   ) {
     this.subscription = new Subscription();
+    this.minDate = new Date();
     this.displayedColumns = ['bookingHour', 'client', 'collaborator', 'service', 'price', 'actions'];
   }
   //Function that is called while component is being loaded.
@@ -62,13 +66,24 @@ export class BookingsComponent implements OnInit, OnDestroy {
         .pipe(switchMap((user) => this.fs.getBookings(user!.uid)))
         .subscribe((res) => {
           this.bookingList = new MatTableDataSource(res);
-          this.bookingList.sort = this.sort;
-          this.bookingList.paginator = this.paginator;
+          this.bookingListFiltered = new MatTableDataSource(res);
+          this.bookingListFiltered.sort = this.sort;
+          this.bookingListFiltered.paginator = this.paginator;
         })
     );
   }
   //Date filter that will be used to filter the booking table
-  filterDate(event: MatDatepickerInputEvent<Date>): void {}
+  filterDate(event: MatDatepickerInputEvent<Date>): void {
+    this.bookingListFiltered.data = this.bookingList.data;
+    event.value
+      ? (this.bookingListFiltered.data = this.bookingListFiltered.data.filter(
+          (x) =>
+            (x.date as Timestamp).toDate().getDate() == event.value?.getDate() &&
+            (x.date as Timestamp).toDate().getMonth() == event.value?.getMonth() &&
+            (x.date as Timestamp).toDate().getDay() == event.value?.getDay()
+        ))
+      : (this.bookingListFiltered.data = this.bookingList.data);
+  }
 
   //Redirect to service-form component
   addBooking(): void {
@@ -94,8 +109,11 @@ export class BookingsComponent implements OnInit, OnDestroy {
           //Deletes the booking on firestore
           this.fs.deleteBookingData(booking);
           //Updates booking's table
-          const index = this.bookingList.data.indexOf(booking);
-          this.bookingList.data.splice(index, 1);
+          const index = this.bookingListFiltered.data.indexOf(booking);
+          this.bookingListFiltered.data.splice(index, 1);
+          this.bookingListFiltered.data = this.bookingListFiltered.data.filter(
+            (booking) => this.bookingListFiltered.data.indexOf(booking) != index
+          );
           //Html informative snackBar element is opened
           this._snackBar.open(`O agendamento com o cliente ${booking.client} foi apagado com sucesso!`, 'Fechar');
         }
@@ -118,9 +136,8 @@ export class BookingsComponent implements OnInit, OnDestroy {
   //This function is called on html and return the profits of a day
   getTotalCost(services: Service[] | null | undefined): number | null {
     return (
-      services
-        ?.filter((x) => this.bookingList.data.map((id) => id.serviceId).includes(x.documentId))
-        .map((service) => service.price)
+      this.bookingListFiltered.data
+        .map((booking) => services!.find((service) => service.documentId === booking.serviceId)!.price)
         .reduce((acc, value) => acc + value, 0) || 0
     );
   }

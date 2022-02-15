@@ -45,7 +45,7 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
     this.serviceForm = this.fb.group({
       name: ['', Validators.required],
       price: ['0.00', [Validators.required, Validators.min(0.01)]],
-      collaborator: [''],
+      collaboratorIdList: [''],
       description: ['']
     });
   }

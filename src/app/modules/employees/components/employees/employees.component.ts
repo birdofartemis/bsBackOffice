@@ -30,7 +30,7 @@ export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {
   lastPageLabel: string;
 
   //Columns that appear on table and its dataSource
-  displayedColumns: string[] = ['name', 'email', 'phone', 'citizenCard', 'taxIdNumber', 'actions'];
+  displayedColumns: string[] = ['name', 'email', 'phone', 'citizenCard', 'taxIdNumber', 'status', 'actions'];
   dataSource!: MatTableDataSource<Collaborator>;
 
   //Variables to access children from table
@@ -96,6 +96,17 @@ export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {
   editColaborator(event: Event, collaborator: Collaborator): void {
     event.stopPropagation();
     void this.router.navigate(['newemployee', collaborator.citizenCard], { relativeTo: this.route });
+  }
+
+  changeStatus(event: Event, collaborator: Collaborator): void {
+    event.stopPropagation();
+    if (collaborator.status === 'Disponível') {
+      collaborator.status = 'Ausente';
+      this.fs.updateCollaborator(collaborator);
+    } else {
+      collaborator.status = 'Disponível';
+      this.fs.updateCollaborator(collaborator);
+    }
   }
 
   //Open dialog do confirm the deletion

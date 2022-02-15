@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -42,9 +42,9 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     this.collaboratorForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
-      citizenCard: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]],
-      taxIdNumber: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]]
+      phone: ['', [Validators.required, this.validateLenght('phone', 8)]],
+      citizenCard: ['', [Validators.required, this.validateLenght('citizenCard', 8)]],
+      taxIdNumber: ['', [Validators.required, this.validateLenght('taxIdNumber', 8)]]
     });
   }
 
@@ -68,6 +68,14 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     );
   }
 
+  //Custom Validator to validate lenght of field
+  validateLenght(field: string, lenght: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const fieldValue = control.parent?.get(field)?.value as string;
+      return fieldValue?.length - lenght === 0 ? null : { errorLenght: true };
+    };
+  }
+
   //add collaborator on firestore
   addCollaborator(event: Event, collaborator: Collaborator): void {
     event.stopPropagation();
@@ -76,6 +84,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
         //sucess
         (res) => {
           //patch value uidSalon with user id (primary key)
+          collaborator.status = 'Ativo';
           this.fs.addCollaboratorData({ ...collaborator, uidSalon: res!.uid });
           //Reset html form
           this.collaboratorForm.reset();

@@ -6,7 +6,7 @@
   <div class="calendar-div">
     <mat-form-field appearance="fill">
       <mat-label>Datas das marcações</mat-label>
-      <input matInput (dateInput)="filterDate($event)" [matDatepicker]="picker" />
+      <input matInput (dateInput)="filterDate($event)" [matDatepicker]="picker" [min]="minDate" />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker touchUi #picker></mat-datepicker>
     </mat-form-field>
@@ -18,7 +18,7 @@
   </div>
 
   <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="bookingList" matSort>
+    <table mat-table [dataSource]="bookingListFiltered" matSort>
       <ng-container matColumnDef="bookingHour">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Agendamento</th>
         <td mat-cell *matCellDef="let element">{{element.date.toDate() | date: 'd/M/yyyy, HH:mm' }}</td>

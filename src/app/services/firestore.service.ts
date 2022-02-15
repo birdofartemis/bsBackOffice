@@ -40,7 +40,17 @@ export class FirestoreService {
   }
 
   deleteCollaboratorData(collaborator: Collaborator): void {
-    this.db.collection('employees').doc(collaborator.citizenCard).delete();
+    this.getServices('exemplo').pipe(
+      map((services) =>
+        services
+          .map((service) => service.collaboratorIdList.find((id) => id === collaborator.citizenCard))
+          .map((value) => {
+            if (!value) {
+              this.db.collection('employees').doc(collaborator.citizenCard).delete();
+            }
+          })
+      )
+    );
   }
 
   getCollaborators(userUID: string): Observable<Collaborator[]> {

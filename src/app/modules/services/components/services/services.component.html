@@ -48,11 +48,12 @@
               <div class="example-element-description">
                 <h2>{{ element.name }}</h2>
                 <b><h3>Descrição do serviço:</h3></b>
+                <p *ngIf="!element.description"><mat-icon inline="true">info</mat-icon> Nenhuma descrição a mostrar.</p>
                 <p>{{ element.description }}</p>
                 <mat-list>
                   <div mat-subheader>Colaboradores</div>
                   <mat-list-item *ngIf="element.collaborator==0">
-                    <div mat-line><b>Nenhum</b></div>
+                    <div mat-line><mat-icon inline="true">warning</mat-icon> Nenhum colaborador está associado a este serviço.</div>
                   </mat-list-item>
                   <mat-list-item *ngFor="let collaboratorId of element.collaborator">
                     <mat-icon mat-list-icon>person</mat-icon>

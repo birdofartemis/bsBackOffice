@@ -40,12 +40,12 @@
           <div class="form-booking-data">
             <mat-form-field appearance="fill" *ngIf="{'data': serviceList$ | async} as services">
               <mat-label>Escolha um serviço</mat-label>
-              <mat-select formControlName="serviceId">
+              <mat-select formControlName="serviceId" (valueChange)="filterCollaboratorList($event)">
                 <mat-option *ngFor="let service of services.data" [value]="service.documentId">{{ service.name }}</mat-option>
               </mat-select>
             </mat-form-field>
 
-            <mat-form-field appearance="fill" *ngIf="{'data': collaboratorList$ | async} as collaborators">
+            <mat-form-field appearance="fill" *ngIf="{'data': filteredCollaboratorList$ | async} as collaborators">
               <mat-label>Escolha um colaborador</mat-label>
               <mat-select formControlName="collaboratorId">
                 <mat-option *ngFor="let collaborator of collaborators.data" [value]="collaborator.citizenCard"

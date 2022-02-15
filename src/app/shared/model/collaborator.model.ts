@@ -6,4 +6,5 @@ export interface Collaborator {
   telephone: string;
   citizenCard: string;
   taxIdNumber: string;
+  status: string;
 }

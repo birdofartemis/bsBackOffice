@@ -27,13 +27,17 @@
     table {
       width: 100%;
     }
+    td,
+    th {
+      width: 50%;
+    }
 
     .example-detail-row {
       height: 0;
     }
 
     .example-element-row:not(.example-expanded-row):hover {
-      background: rgb(182, 182, 182);
+      background: rgba(182, 182, 182, 0.5);
     }
 
     .example-element-row:not(.example-expanded-row):active {
