@@ -113,12 +113,17 @@ export class ServicesComponent implements OnInit, OnDestroy, AfterViewInit {
         //Res can be true if the user confirm the deletion or null
         if (res) {
           //Deletes the service on firestore
-          this.fs.deleteServiceData(service.documentId);
-          //Updates service's table
-          const index = this.serviceList.data.indexOf(service);
-          this.serviceList.data.splice(index, 1);
-          //Html informative snackBar element is opened
-          this._snackBar.open(`${service.name} foi apagado com sucesso!`, 'Fechar');
+          this.user$.pipe(switchMap((user) => this.fs.triggerDeleteServiceData(service, user!.uid))).subscribe((res) => {
+            if (!res) {
+              this.fs.deleteServiceData(service.documentId);
+              //Updates service's table
+              this.serviceList.data = this.serviceList.data.filter((services) => services.documentId !== service.documentId);
+              //Html informative snackBar element is opened
+              this._snackBar.open(`${service.name} foi apagado com sucesso!`, 'Fechar');
+            } else {
+              this._snackBar.open(`Não foi possível apagar o serviço ${service.name} pois este está associado a um agendamento!`, 'Fechar');
+            }
+          });
         }
       })
     );

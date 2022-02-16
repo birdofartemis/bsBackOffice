@@ -83,7 +83,7 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
     //Adds do service object the collaborator's ids or an empty array
     const service: Service = { ...formValue, collaboratorIdList: collaboratorIdList };
     this.subscription.add(
-      this.fs.addServiceData({ ...service, uidSallon: user!.uid }).subscribe(
+      this.fs.addServiceData({ ...service, uidSalon: user!.uid }).subscribe(
         //sucess
         (res) => {
           //Adds idDocument to the service object to work as an id

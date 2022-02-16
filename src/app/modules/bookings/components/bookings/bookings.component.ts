@@ -85,6 +85,11 @@ export class BookingsComponent implements OnInit, OnDestroy {
       : (this.bookingListFiltered.data = this.bookingList.data);
   }
 
+  dateFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    return day !== 2;
+  };
+
   //Redirect to service-form component
   addBooking(): void {
     this.router.navigate(['newbooking'], { relativeTo: this.route });
@@ -110,10 +115,10 @@ export class BookingsComponent implements OnInit, OnDestroy {
           this.fs.deleteBookingData(booking);
           //Updates booking's table
           const index = this.bookingListFiltered.data.indexOf(booking);
-          this.bookingListFiltered.data.splice(index, 1);
           this.bookingListFiltered.data = this.bookingListFiltered.data.filter(
             (booking) => this.bookingListFiltered.data.indexOf(booking) != index
           );
+          this.bookingList.data = this.bookingListFiltered.data;
           //Html informative snackBar element is opened
           this._snackBar.open(`O agendamento com o cliente ${booking.client} foi apagado com sucesso!`, 'Fechar');
         }

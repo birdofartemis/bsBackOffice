@@ -7,7 +7,7 @@ export interface Service {
   price: number;
   description: string;
   collaboratorIdList: string[];
-  uidSallon: string;
+  uidSalon: string;
 }
 
 export interface ServiceForm extends Omit<Service, 'collaboratorIdList'> {

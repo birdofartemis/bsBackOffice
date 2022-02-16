@@ -72,6 +72,7 @@ export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {
       //Process array of Collaborators and activate sort and paginator
       this.auth.authState.pipe(switchMap((user) => this.fs.getCollaborators(user!.uid))).subscribe((res) => {
         this.dataSource = new MatTableDataSource(res);
+        console.log(this.dataSource.data);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.loadingService.updateLoading(false);
@@ -125,14 +126,27 @@ export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {
       dialofRef.afterClosed().subscribe((res) => {
         //Res can be true if the user confirm the deletion or null
         if (res) {
-          //Deletes the collaborator on firestore
-          this.fs.deleteCollaboratorData(employee);
-          //Updates collaborator's table
-          const index = this.dataSource.data.indexOf(employee);
-          this.dataSource.data.splice(index, 1);
-          this.dataSource._updateChangeSubscription();
-          //Html informative snackBar element is opened
-          this._snackBar.open(`${employee.name} foi apagado com sucesso!`, 'Fechar');
+          this.subscription.add(
+            this.auth.authState.subscribe((user) => {
+              //Deletes the collaborator on firestore
+              this.fs.triggerDeleteCollaboratorData(employee, user!.uid).subscribe((res) => {
+                if (!res[0]) {
+                  this.fs.deleteCollaboratorData(employee);
+                  //Updates collaborator's table
+                  const index = this.dataSource.data.indexOf(employee);
+                  this.dataSource.data.splice(index, 1);
+                  this.dataSource._updateChangeSubscription();
+                  //Html informative snackBar element is opened
+                  this._snackBar.open(`${employee.name} foi apagado com sucesso!`, 'Fechar');
+                } else {
+                  this._snackBar.open(
+                    `O colaborador ${employee.name} não foi possível de apagar pois está relacionado a um serviço!`,
+                    'Fechar'
+                  );
+                }
+              });
+            })
+          );
         }
       })
     );

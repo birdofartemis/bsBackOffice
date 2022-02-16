@@ -42,7 +42,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     this.collaboratorForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, this.validateLenght('phone', 8)]],
+      phone: ['', [Validators.required, this.validateLenght('phone', 9)]],
       citizenCard: ['', [Validators.required, this.validateLenght('citizenCard', 8)]],
       taxIdNumber: ['', [Validators.required, this.validateLenght('taxIdNumber', 8)]]
     });
@@ -84,7 +84,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
         //sucess
         (res) => {
           //patch value uidSalon with user id (primary key)
-          collaborator.status = 'Ativo';
+          collaborator.status = 'Disponível';
           this.fs.addCollaboratorData({ ...collaborator, uidSalon: res!.uid });
           //Reset html form
           this.collaboratorForm.reset();

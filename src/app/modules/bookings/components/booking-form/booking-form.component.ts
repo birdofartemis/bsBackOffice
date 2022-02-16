@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import firebase from 'firebase/compat/app';
 import { Observable, Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { AuthServiceService, FirestoreService } from 'src/app/services';
 import { Booking } from 'src/app/shared/model/booking.model';
 import { Collaborator } from 'src/app/shared/model/collaborator.model';
@@ -41,7 +41,7 @@ export class BookingFormComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     //Not loaded data (streams)
     this.user$ = this.auth.getUserUID();
-    this.collaboratorList$ = this.user$.pipe(switchMap((user) => this.fs.getCollaborators(user!.uid)));
+    this.collaboratorList$ = this.user$.pipe(switchMap((user) => this.fs.getAvailableCollaborators(user!.uid)));
     this.filteredCollaboratorList$ = this.collaboratorList$;
     this.serviceList$ = this.user$.pipe(switchMap((user) => this.fs.getServices(user!.uid)));
   }
@@ -53,7 +53,8 @@ export class BookingFormComponent implements OnInit, OnDestroy {
 
       this.filteredCollaboratorList$ = this.fs
         .getService(event.toString())
-        .pipe(switchMap((service) => this.fs.getCollaboratorsFromService(service.data()!.collaboratorIdList)));
+        .pipe(switchMap((service) => this.fs.getCollaboratorsFromService(service.data()!.collaboratorIdList)))
+        .pipe(map((collaborators) => collaborators.filter((collaborator) => collaborator.status === 'Disponível')));
     } else {
       this.filteredCollaboratorList$ = this.collaboratorList$;
     }

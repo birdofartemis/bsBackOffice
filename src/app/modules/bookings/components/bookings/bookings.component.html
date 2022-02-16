@@ -6,7 +6,7 @@
   <div class="calendar-div">
     <mat-form-field appearance="fill">
       <mat-label>Datas das marcações</mat-label>
-      <input matInput (dateInput)="filterDate($event)" [matDatepicker]="picker" [min]="minDate" />
+      <input matInput (dateInput)="filterDate($event)" [matDatepickerFilter]="dateFilter" [matDatepicker]="picker" [min]="minDate" />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker touchUi #picker></mat-datepicker>
     </mat-form-field>
@@ -73,6 +73,9 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="6">Tabela não contém dados!</td>
+      </tr>
     </table>
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>

@@ -52,10 +52,10 @@
                 <p>{{ element.description }}</p>
                 <mat-list>
                   <div mat-subheader>Colaboradores</div>
-                  <mat-list-item *ngIf="element.collaborator==0">
+                  <mat-list-item *ngIf="element.collaboratorIdList==0">
                     <div mat-line><mat-icon inline="true">warning</mat-icon> Nenhum colaborador está associado a este serviço.</div>
                   </mat-list-item>
-                  <mat-list-item *ngFor="let collaboratorId of element.collaborator">
+                  <mat-list-item *ngFor="let collaboratorId of element.collaboratorIdList">
                     <mat-icon mat-list-icon>person</mat-icon>
                     <div mat-line>{{getFirstCollaboratorName(collaboratorId, collaboratorList$ | async)}}</div>
                   </mat-list-item>
@@ -75,6 +75,9 @@
           (click)="expandedElement = expandedElement === element ? null : element"
         ></tr>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="3">Tabela não contém dados</td>
+        </tr>
       </table>
       <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
