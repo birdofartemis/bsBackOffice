@@ -11,21 +11,16 @@
       <mat-card-title>{{ textHeader }}</mat-card-title>
 
       <mat-card-content>
-        <div class="photo-container">
-          <div class="change-photo" (click)="changeImage()">
-            <span class="material-icons photo_camera"> photo_camera </span>
-          </div>
-          <img *ngIf="false; else avatar" class="resource-photo" />
-          <!--   <img *ngIf="photo.new || photo.actual; else avatar" [src]="photo.new || photo.actual" class="resource-photo" /> -->
-
-          <ng-template #avatar>
-            <i class="material-icons icon noresource-photo">account_circle</i>
-          </ng-template>
-        </div>
-        <!-- (change)="imageChanged(imageInput)" -->
-        <input #imageInput id="image" type="file" />
-
         <form [formGroup]="serviceForm">
+          <div class="photo-container" (click)="changeImage($event)">
+            <div *ngIf="serviceForm.get('url')!.value; else elseBlock">
+              <app-photo [photoUrl]="serviceForm.get('url')?.value" photoWidth="10" photoHeight="10"> </app-photo>
+            </div>
+            <ng-template #elseBlock>
+              <img id="profileImage" src="../../../../../assets/no-user-image-icon-27.png" />
+            </ng-template>
+            <input #photoInput hidden="true" type="file" (change)="photoInputChange($event)" accept=".png,.jpeg,.jpg,.giv,.svg" />
+          </div>
           <div class="form-collaborator-data">
             <mat-form-field>
               <mat-label>Serviço</mat-label>
@@ -68,9 +63,7 @@
 
         <mat-card-actions *ngIf="{'user': user$ | async} as data">
           <div class="buttons-div">
-            <button mat-flat-button type="button" color="warn" routerLink="/home/services" routerLinkActive="active">
-              {{ buttonExitText }}
-            </button>
+            <button mat-flat-button type="button" color="warn" (click)="onCancelButton($event)">{{ buttonExitText }}</button>
             <button
               mat-flat-button
               type="button"

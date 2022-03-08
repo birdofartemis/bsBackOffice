@@ -1,11 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UUID } from 'angular2-uuid';
 import firebase from 'firebase/compat/app';
 import { Observable, Subscription } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
-import { AuthServiceService, FirestoreService } from 'src/app/services';
+import { AuthServiceService, FirestoreService, StorageService } from 'src/app/services';
 import { Collaborator } from 'src/app/shared/model/collaborator.model';
 import { Service, ServiceDoc } from 'src/app/shared/model/service.model';
 
@@ -27,10 +28,13 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
   user$!: Observable<firebase.User | null>;
   documentId?: string;
 
+  @ViewChild('photoInput') photoInput!: ElementRef;
+
   constructor(
     private fb: FormBuilder,
     private fs: FirestoreService,
     private authService: AuthServiceService,
+    private storage: StorageService,
     private _snackBar: MatSnackBar,
     private router: Router,
     private route: ActivatedRoute
@@ -46,7 +50,8 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
       name: ['', Validators.required],
       price: ['0.00', [Validators.required, Validators.min(0.01)]],
       collaboratorIdList: [''],
-      description: ['']
+      description: [''],
+      url: ['']
     });
   }
 
@@ -117,31 +122,33 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  //Stores image
-  imageChanged(imageInput: { files: File[] }): void {
-    const file = imageInput.files[0];
-
-    if (!file) return;
-
-    const mimeType = file.type;
-    const reg = /image\/*/;
-    if (reg.exec(mimeType) == null) {
-      this._snackBar.open('Apenas imagens são suportadas');
-      return;
+  onCancelButton(event: Event) {
+    event.stopPropagation();
+    if (!this.isEdit && this.serviceForm.get('url')!.value) {
+      this.storage.deletePhoto(this.serviceForm.get('url')!.value);
     }
-    const reader = new FileReader();
-
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      /* if (editingSelf) this.store.dispatch(setUserPhoto({ photo: reader.result as string }));
-      return this.store.dispatch(addResourcePhoto({ photo: reader.result, file })); */
-    };
-
-    // if (this.resourceForm.get('_id').value) this.store.dispatch(updatePicture({ id: this.resourceForm.get('_id').value as string, file }));
+    this.router.navigate(['/home/services'], { relativeTo: this.route });
   }
-  //event when image change
-  changeImage(): void {
-    document!.getElementById('image')!.click();
+
+  //Stores image
+  changeImage(event: MouseEvent): void {
+    event.stopPropagation();
+    if (event.isTrusted) {
+      this.photoInput.nativeElement.click();
+    }
+  }
+
+  photoInputChange(event: any): void {
+    if (event && this.serviceForm.get('url')!.value) {
+      this.storage.deletePhoto(this.serviceForm.get('url')!.value);
+      this.storage.uploadFile(event, UUID.UUID()).subscribe((res) => {
+        this.serviceForm.get('url')?.setValue(`gs://${res.ref.bucket}/${res.ref.fullPath}`);
+      });
+    } else {
+      this.storage.uploadFile(event, UUID.UUID()).subscribe((res) => {
+        this.serviceForm.get('url')?.setValue(`gs://${res.ref.bucket}/${res.ref.fullPath}`);
+      });
+    }
   }
 
   //Used on Html to get collaborators name through  citizen's card

@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UUID } from 'angular2-uuid';
 import { Subscription } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
-import { FirestoreService } from 'src/app/services';
+import { FirestoreService, StorageService } from 'src/app/services';
 import { LoadingService } from 'src/app/shared/services/loading/loading.service';
 
 import { AuthServiceService } from '../../../../../services/auth-service.service';
@@ -21,6 +22,7 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
   hide: boolean;
   isEdit: boolean;
 
+  @ViewChild('photoInput') photoInput!: ElementRef;
   constructor(
     private fb: FormBuilder,
     private authService: AuthServiceService,
@@ -28,7 +30,8 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private loadingService: LoadingService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private storage: StorageService
   ) {
     this.hide = true;
     this.isEdit = false;
@@ -42,7 +45,8 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
       postalCode: ['', Validators.required],
       telephone: ['', Validators.required],
       name: ['', Validators.required],
-      termsConditions: ['', [Validators.required, Validators.requiredTrue]]
+      termsConditions: ['', [Validators.required, Validators.requiredTrue]],
+      url: ['']
     });
   }
 
@@ -125,32 +129,35 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
       control?.parent?.get('password')?.value === control.value ? null : { diffPassword: control.value };
   }
 
-  showTerms(event: Event) {}
-
-  imageChanged(imageInput: { files: File[] }): void {
-    const file = imageInput.files[0];
-
-    if (!file) return;
-
-    const mimeType = file.type;
-    const reg = /image\/*/;
-    if (reg.exec(mimeType) == null) {
-      this._snackBar.open('Apenas imagens são suportadas');
-      return;
+  onCancelButton(event: Event) {
+    event.stopPropagation();
+    if (!this.isEdit && this.signForm.get('url')!.value) {
+      this.storage.deletePhoto(this.signForm.get('url')!.value);
+      this.router.navigate(['/signin'], { relativeTo: this.route });
+    } else {
+      this.router.navigate(['/home/config'], { relativeTo: this.route });
     }
-    const reader = new FileReader();
-
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      /* if (editingSelf) this.store.dispatch(setUserPhoto({ photo: reader.result as string }));
-      return this.store.dispatch(addResourcePhoto({ photo: reader.result, file })); */
-    };
-
-    // if (this.resourceForm.get('_id').value) this.store.dispatch(updatePicture({ id: this.resourceForm.get('_id').value as string, file }));
   }
 
-  changeImage(): void {
-    document!.getElementById('image')!.click();
+  //Stores image
+  changeImage(event: MouseEvent): void {
+    event.stopPropagation();
+    if (event.isTrusted) {
+      this.photoInput.nativeElement.click();
+    }
+  }
+
+  photoInputChange(event: any): void {
+    if (event && this.signForm.get('url')!.value) {
+      this.storage.deletePhoto(this.signForm.get('url')!.value);
+      this.storage.uploadFile(event, UUID.UUID()).subscribe((res) => {
+        this.signForm.get('url')?.setValue(`gs://${res.ref.bucket}/${res.ref.fullPath}`);
+      });
+    } else {
+      this.storage.uploadFile(event, UUID.UUID()).subscribe((res) => {
+        this.signForm.get('url')?.setValue(`gs://${res.ref.bucket}/${res.ref.fullPath}`);
+      });
+    }
   }
 
   ngOnDestroy(): void {

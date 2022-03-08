@@ -1,6 +1,7 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -24,6 +25,7 @@ import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MenuComponent } from './main/menu/menu.component';
+import { StorageService } from './services';
 import { AuthServiceService } from './services/auth-service.service';
 import { FirestoreService } from './services/firestore.service';
 import { DeleteWarningComponent } from './shared/components/delete-warning/delete-warning.component';
@@ -48,6 +50,7 @@ import { LoadingService } from './shared/services/loading/loading.service';
     MatProgressBarModule,
     MatDialogModule,
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFireStorageModule,
     LayoutModule,
     MatToolbarModule,
     MatSidenavModule,
@@ -56,7 +59,7 @@ import { LoadingService } from './shared/services/loading/loading.service';
     MatMenuModule,
     MatSlideToggleModule
   ],
-  providers: [AuthServiceService, FirestoreService, LoadingService],
+  providers: [AuthServiceService, FirestoreService, LoadingService, StorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

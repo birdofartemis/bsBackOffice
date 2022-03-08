@@ -10,7 +10,7 @@ import { Subject, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { LoadingService } from 'src/app/shared/services/loading/loading.service';
 
-import { FirestoreService } from '../../../../services';
+import { FirestoreService, StorageService } from '../../../../services';
 import { DeleteWarningComponent } from '../../../../shared/components/delete-warning/delete-warning.component';
 import { Collaborator } from '../../../../shared/model/collaborator.model';
 
@@ -30,7 +30,7 @@ export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {
   lastPageLabel: string;
 
   //Columns that appear on table and its dataSource
-  displayedColumns: string[] = ['name', 'email', 'phone', 'citizenCard', 'taxIdNumber', 'status', 'actions'];
+  displayedColumns: string[] = ['photoUrl', 'name', 'email', 'phone', 'citizenCard', 'taxIdNumber', 'status', 'actions'];
   dataSource!: MatTableDataSource<Collaborator>;
 
   //Variables to access children from table
@@ -43,6 +43,7 @@ export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {
     private route: ActivatedRoute,
     private fs: FirestoreService,
     private auth: AngularFireAuth,
+    private storage: StorageService,
     private loadingService: LoadingService,
     public dialog: MatDialog,
     private _snackBar: MatSnackBar
@@ -72,7 +73,6 @@ export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {
       //Process array of Collaborators and activate sort and paginator
       this.auth.authState.pipe(switchMap((user) => this.fs.getCollaborators(user!.uid))).subscribe((res) => {
         this.dataSource = new MatTableDataSource(res);
-        console.log(this.dataSource.data);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.loadingService.updateLoading(false);
@@ -132,10 +132,14 @@ export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {
               this.fs.triggerDeleteCollaboratorData(employee, user!.uid).subscribe((res) => {
                 if (!res[0]) {
                   this.fs.deleteCollaboratorData(employee);
+
                   //Updates collaborator's table
                   const index = this.dataSource.data.indexOf(employee);
                   this.dataSource.data.splice(index, 1);
                   this.dataSource._updateChangeSubscription();
+                  if (employee.url) {
+                    this.storage.deletePhoto(employee.url);
+                  }
                   //Html informative snackBar element is opened
                   this._snackBar.open(`${employee.name} foi apagado com sucesso!`, 'Fechar');
                 } else {

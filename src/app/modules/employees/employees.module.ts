@@ -11,6 +11,7 @@ import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginato
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { PhotoModule } from 'src/app/shared/modules/photo/photo-module';
 
 import { EmployeeFormComponent } from './components/employee-form/employee-form.component';
 import { EmployeesComponent } from './components/employees/employees.component';
@@ -32,7 +33,8 @@ import { EmployeesRoutingModule } from './employees-routing.module';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    PhotoModule
   ],
   providers: [{ provide: MatPaginatorIntl, useClass: EmployeesComponent }]
 })

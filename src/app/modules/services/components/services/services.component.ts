@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/compat/app';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { AuthServiceService, FirestoreService } from 'src/app/services';
+import { AuthServiceService, FirestoreService, StorageService } from 'src/app/services';
 import { DeleteWarningComponent } from 'src/app/shared/components/delete-warning/delete-warning.component';
 import { Collaborator } from 'src/app/shared/model/collaborator.model';
 import { Service } from 'src/app/shared/model/service.model';
@@ -49,6 +49,7 @@ export class ServicesComponent implements OnInit, OnDestroy, AfterViewInit {
     private route: ActivatedRoute,
     private fs: FirestoreService,
     private auth: AuthServiceService,
+    private storage: StorageService,
     private loadingService: LoadingService,
     public dialog: MatDialog,
     private _snackBar: MatSnackBar
@@ -119,6 +120,9 @@ export class ServicesComponent implements OnInit, OnDestroy, AfterViewInit {
               //Updates service's table
               this.serviceList.data = this.serviceList.data.filter((services) => services.documentId !== service.documentId);
               //Html informative snackBar element is opened
+              if (service.url) {
+                this.storage.deletePhoto(service.url);
+              }
               this._snackBar.open(`${service.name} foi apagado com sucesso!`, 'Fechar');
             } else {
               this._snackBar.open(`Não foi possível apagar o serviço ${service.name} pois este está associado a um agendamento!`, 'Fechar');

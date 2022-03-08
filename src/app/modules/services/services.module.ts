@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { PhotoModule } from 'src/app/shared/modules/photo/photo-module';
 
 import { EmployeesComponent } from '../employees/components/employees/employees.component';
 import { ServicesFormComponent } from './components/services-form/services-form.component';
@@ -41,7 +42,8 @@ import { ServicesRoutingModule } from './services-routing.module';
     MatTableModule,
     MatDialogModule,
     MatSortModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    PhotoModule
   ],
   providers: [{ provide: MatPaginatorIntl, useClass: EmployeesComponent }]
 })

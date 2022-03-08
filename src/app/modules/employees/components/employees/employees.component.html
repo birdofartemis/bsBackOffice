@@ -21,6 +21,18 @@
       </mat-form-field>
 
       <table mat-table [dataSource]="dataSource" matSort matSortActive="name" matSortDirection="asc">
+        <ng-container matColumnDef="photoUrl">
+          <th mat-header-cell *matHeaderCellDef>Foto</th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngIf="element.url; else elseBlock">
+              <app-photo [photoUrl]="element!.url"></app-photo>
+            </div>
+            <ng-template #elseBlock>
+              <img id="profileImage" src="../../../../../assets/no-user-image-icon-27.png" />
+            </ng-template>
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
           <td mat-cell *matCellDef="let element">{{element.name}}</td>

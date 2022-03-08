@@ -24,6 +24,7 @@
     "@angular/router": "~12.1.0-",
     "@ng-bootstrap/ng-bootstrap": "^9.0.0",
     "@swimlane/ngx-charts": "^19.1.0",
+    "angular2-uuid": "^1.1.1",
     "bootstrap": "^4.5.0",
     "firebase": "^9.0.1",
     "rxfire": "^6.0.0",

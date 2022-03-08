@@ -99,6 +99,13 @@ export class FirestoreService {
     return from(ref.where('citizenCard', 'in', citizenCards).get()).pipe(map((res) => res.docs.map((value) => value.data())));
   }
 
+  getAvailableCollaboratorsFromService(citizenCards: string[]): Observable<Collaborator[]> {
+    const ref = this.db.collection('employees').ref as CollectionReference<Collaborator>;
+    return from(ref.where('citizenCard', 'in', citizenCards).where('status', '==', 'Disponível').get()).pipe(
+      map((res) => res.docs.map((value) => value.data()))
+    );
+  }
+
   //Bookings
 
   addBookingData(booking: Booking): Observable<DocumentReference<unknown>> {

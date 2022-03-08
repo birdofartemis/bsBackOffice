@@ -31,11 +31,18 @@
 
     td,
     th {
-      width: 18%;
+      width: auto;
     }
   }
   mat-icon {
     margin-right: 0.3rem;
+    vertical-align: middle;
+  }
+
+  #profileImage {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
     vertical-align: middle;
   }
 }

@@ -36,50 +36,13 @@
     margin: 0.7rem;
   }
 }
-
-#image {
-  display: none;
-}
-
-.change-photo {
-  opacity: 0;
-  width: 10.2rem;
-  background-color: #6060607d;
-  position: absolute;
-  border-radius: 50%;
-  height: 10.2rem;
-  object-fit: cover;
-  cursor: pointer;
-
-  .photo_camera {
-    display: flex;
-    height: 10rem;
-    justify-content: center;
-    color: white;
-    align-items: center;
-    font-size: 3rem;
-  }
-}
-
-.change-photo:hover {
-  opacity: 1;
-}
-
 .photo-container {
-  margin: 1.75rem 2rem 0 2rem;
-  position: relative;
-  height: fit-content;
+  padding-bottom: 2rem;
+}
 
-  .resource-photo {
-    width: 10rem;
-    border-radius: 50%;
-    border: 0.13rem solid black;
-    height: 10rem;
-    object-fit: cover;
-    cursor: pointer;
-  }
-
-  .noresource-photo {
-    font-size: 10rem;
-  }
+#profileImage {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  vertical-align: middle;
 }

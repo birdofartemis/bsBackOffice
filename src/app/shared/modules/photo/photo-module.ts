@@ -8,23 +8,20 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { PhotoModule } from '../photo/photo-module';
-import { CreateAccountComponent } from './component/create-account/create-account.component';
-import { SallonDataRoutingModule } from './sallonData-routing.module';
+import { PhotoComponent } from './components/photo.component';
 
 @NgModule({
-  declarations: [CreateAccountComponent],
+  declarations: [PhotoComponent],
   imports: [
     CommonModule,
-    SallonDataRoutingModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatCardModule,
     MatIconModule,
     MatButtonModule,
     MatInputModule,
-    MatCheckboxModule,
-    PhotoModule
-  ]
+    MatCheckboxModule
+  ],
+  exports: [PhotoComponent]
 })
-export class SallonDataModule {}
+export class PhotoModule {}

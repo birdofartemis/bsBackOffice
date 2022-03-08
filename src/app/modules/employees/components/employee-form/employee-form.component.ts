@@ -1,9 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UUID } from 'angular2-uuid';
 import { Subscription } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
+import { StorageService } from 'src/app/services';
 import { AuthServiceService } from 'src/app/services/auth-service.service';
 import { FirestoreService } from 'src/app/services/firestore.service';
 import { Collaborator } from 'src/app/shared/model/collaborator.model';
@@ -21,7 +23,8 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   textHeader: string;
   buttonExitText: string;
   buttonConfirmText: string;
-  newPhoto?: string | ArrayBuffer;
+
+  @ViewChild('photoInput') photoInput!: ElementRef;
 
   constructor(
     private fb: FormBuilder,
@@ -29,7 +32,8 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     private auth: AuthServiceService,
     private _snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private storage: StorageService
   ) {
     this.subscription = new Subscription();
 
@@ -44,7 +48,8 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, this.validateLenght('phone', 9)]],
       citizenCard: ['', [Validators.required, this.validateLenght('citizenCard', 8)]],
-      taxIdNumber: ['', [Validators.required, this.validateLenght('taxIdNumber', 8)]]
+      taxIdNumber: ['', [Validators.required, this.validateLenght('taxIdNumber', 8)]],
+      url: ['']
     });
   }
 
@@ -111,32 +116,33 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     this.router.navigate(['/home/employees'], { relativeTo: this.route });
   }
 
-  //Stores image
-  imageChanged(imageInput: { files: File[] }): void {
-    const file = imageInput.files[0];
-
-    if (!file) return;
-
-    const mimeType = file.type;
-    const reg = /image\/*/;
-    if (reg.exec(mimeType) == null) {
-      this._snackBar.open('Apenas imagens são suportadas');
-      return;
+  onCancelButton(event: Event) {
+    event.stopPropagation();
+    if (!this.isEdit && this.collaboratorForm.get('url')!.value) {
+      this.storage.deletePhoto(this.collaboratorForm.get('url')!.value);
     }
-    const reader = new FileReader();
-
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      /* if (editingSelf) this.store.dispatch(setUserPhoto({ photo: reader.result as string }));
-      return this.store.dispatch(addResourcePhoto({ photo: reader.result, file })); */
-    };
-
-    // if (this.resourceForm.get('_id').value) this.store.dispatch(updatePicture({ id: this.resourceForm.get('_id').value as string, file }));
+    this.router.navigate(['/home/employees'], { relativeTo: this.route });
   }
 
-  //event when image change
-  changeImage(): void {
-    document!.getElementById('image')!.click();
+  //Stores image
+  changeImage(event: MouseEvent): void {
+    event.stopPropagation();
+    if (event.isTrusted) {
+      this.photoInput.nativeElement.click();
+    }
+  }
+
+  photoInputChange(event: any): void {
+    if (event && this.collaboratorForm.get('url')!.value) {
+      this.storage.deletePhoto(this.collaboratorForm.get('url')!.value);
+      this.storage.uploadFile(event, UUID.UUID()).subscribe((res) => {
+        this.collaboratorForm.get('url')?.setValue(`gs://${res.ref.bucket}/${res.ref.fullPath}`);
+      });
+    } else {
+      this.storage.uploadFile(event, UUID.UUID()).subscribe((res) => {
+        this.collaboratorForm.get('url')?.setValue(`gs://${res.ref.bucket}/${res.ref.fullPath}`);
+      });
+    }
   }
 
   ngOnDestroy(): void {
