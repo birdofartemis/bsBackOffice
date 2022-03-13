@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 import { PhotoModule } from '../photo/photo-module';
+import { SelectBoxModule } from '../select-box/select-box.module';
 import { CreateAccountComponent } from './component/create-account/create-account.component';
 import { SallonDataRoutingModule } from './sallonData-routing.module';
 
@@ -24,7 +25,8 @@ import { SallonDataRoutingModule } from './sallonData-routing.module';
     MatButtonModule,
     MatInputModule,
     MatCheckboxModule,
-    PhotoModule
+    PhotoModule,
+    SelectBoxModule
   ]
 })
 export class SallonDataModule {}

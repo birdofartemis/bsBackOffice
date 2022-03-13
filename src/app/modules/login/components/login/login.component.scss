@@ -1,100 +1,122 @@
 .container {
   background-image: url('../../../../../assets/Login-Background.jpg');
-  width: 100%;
-  height: 100%;
+  background-size: cover;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-}
+  height: 100vh;
 
-header {
-  display: flex;
-  width: 100%;
-  height: auto;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 1rem;
-
-  img {
-    width: 10rem;
-    height: 10rem;
-    margin: 1rem;
-  }
-  .div-header {
-    position: absolute;
-    width: 100%;
+  header {
     color: #fff;
-    text-align: center;
-  }
-}
-
-mat-card-title {
-  text-align: center;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-
-  a {
-    margin-left: 1rem;
-    color: #2196f3;
-    cursor: pointer;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-
-  mat-form-field {
-    margin: 1rem;
-  }
-}
-
-mat-card-actions {
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-
-  button {
-    width: 100%;
-    padding: auto;
-    margin: auto;
-  }
-}
-
-mat-card-footer {
-  text-align: center;
-  color: rgba(128, 128, 128, 0.993);
-  margin-bottom: 0rem;
-
-  a {
-    color: #2196f3;
-    cursor: pointer;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-}
-.footer {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-
-  ul {
     display: flex;
-    li {
-      margin-right: 1.5rem;
+    padding: 1rem;
+
+    .title {
+      text-align: center;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 80%;
+    }
+
+    .image-div {
+      display: flex;
+
+      // margin: 1rem;
+      max-width: 50%;
+      height: auto;
     }
   }
-  a {
-    text-decoration: none;
-    color: #fff;
+
+  main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    mat-card {
+      padding: 2rem;
+
+      mat-card-title {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+      }
+      mat-card-content {
+        form {
+          display: flex;
+          flex-direction: column;
+          a {
+            margin-left: 1rem;
+            color: #2196f3;
+            cursor: pointer;
+          }
+
+          a:hover {
+            text-decoration: underline;
+          }
+
+          .additional-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+
+            a {
+              height: 1.5rem;
+            }
+          }
+        }
+      }
+      mat-card-actions {
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+
+        button {
+          width: 100%;
+          padding: auto;
+          margin: auto;
+        }
+      }
+      mat-card-footer {
+        text-align: center;
+        color: rgba(128, 128, 128, 0.993);
+        margin-bottom: 0rem;
+
+        a {
+          color: #2196f3;
+          cursor: pointer;
+        }
+
+        a:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
 
-  a:hover {
-    color: rgba(233, 233, 248, 0.301);
+  footer {
+    margin-top: 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    ul {
+      display: flex;
+      color: #fff;
+      li {
+        margin-right: 1.5rem;
+        a {
+          text-decoration: none;
+          color: #fff;
+        }
+
+        a:hover {
+          color: rgba(233, 233, 248, 0.301);
+        }
+      }
+    }
   }
 }

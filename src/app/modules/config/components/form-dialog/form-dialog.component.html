@@ -5,7 +5,7 @@
       <mat-form-field>
         <mat-label>Email</mat-label>
         <input matInput type="email" required formControlName="email" />
-        <mat-error *ngIf="configEmailForm?.get('email')?.errors?.required">Field is required</mat-error>
+        <mat-error *ngIf="configEmailForm?.get('email')?.errors?.required">Campo necessário</mat-error>
       </mat-form-field>
     </div>
 
@@ -13,7 +13,7 @@
       <mat-form-field>
         <mat-label>Password</mat-label>
         <input matInput type="password" required formControlName="password" />
-        <mat-error *ngIf="configEmailForm?.get('password')?.errors?.required">Field is required</mat-error>
+        <mat-error *ngIf="configEmailForm?.get('password')?.errors?.required">Campo necessário</mat-error>
       </mat-form-field>
     </div>
 
@@ -21,7 +21,7 @@
       <mat-form-field>
         <mat-label>Novo Email</mat-label>
         <input matInput type="email" required formControlName="newEmail" />
-        <mat-error *ngIf="configEmailForm?.get('newEmail')?.errors?.required">Field is required</mat-error>
+        <mat-error *ngIf="configEmailForm?.get('newEmail')?.errors?.required">Campo necessário</mat-error>
       </mat-form-field>
     </div>
   </form>

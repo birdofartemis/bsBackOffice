@@ -7,7 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { filter, switchMap, switchMapTo } from 'rxjs/operators';
 import { LoadingService } from 'src/app/shared/services/loading/loading.service';
 
 import { FirestoreService, StorageService } from '../../../../services';
@@ -123,36 +123,30 @@ export class EmployeesComponent implements OnInit, OnDestroy, MatPaginatorIntl {
     const dialofRef = this.dialog.open(DeleteWarningComponent, { data: { name, type: 'colaborador' } });
 
     this.subscription.add(
-      dialofRef.afterClosed().subscribe((res) => {
-        //Res can be true if the user confirm the deletion or null
-        if (res) {
-          this.subscription.add(
-            this.auth.authState.subscribe((user) => {
-              //Deletes the collaborator on firestore
-              this.fs.triggerDeleteCollaboratorData(employee, user!.uid).subscribe((res) => {
-                if (!res[0]) {
-                  this.fs.deleteCollaboratorData(employee);
+      dialofRef
+        .afterClosed()
+        .pipe(
+          filter((response) => !!response),
+          switchMapTo(this.auth.authState),
+          switchMap((user) => this.fs.triggerDeleteCollaboratorData(employee, user!.uid))
+        )
+        .subscribe((res) => {
+          if (!res) {
+            this.fs.deleteCollaboratorData(employee);
 
-                  //Updates collaborator's table
-                  const index = this.dataSource.data.indexOf(employee);
-                  this.dataSource.data.splice(index, 1);
-                  this.dataSource._updateChangeSubscription();
-                  if (employee.url) {
-                    this.storage.deletePhoto(employee.url);
-                  }
-                  //Html informative snackBar element is opened
-                  this._snackBar.open(`${employee.name} foi apagado com sucesso!`, 'Fechar');
-                } else {
-                  this._snackBar.open(
-                    `O colaborador ${employee.name} não foi possível de apagar pois está relacionado a um serviço!`,
-                    'Fechar'
-                  );
-                }
-              });
-            })
-          );
-        }
-      })
+            //Updates collaborator's table
+            const index = this.dataSource.data.indexOf(employee);
+            this.dataSource.data.splice(index, 1);
+            this.dataSource._updateChangeSubscription();
+            if (employee.url) {
+              this.storage.deletePhoto(employee.url);
+            }
+            //Html informative snackBar element is opened
+            this._snackBar.open(`${employee.name} foi apagado com sucesso!`, 'Fechar');
+          } else {
+            this._snackBar.open(`O colaborador ${employee.name} não foi possível de apagar pois está relacionado a um serviço!`, 'Fechar');
+          }
+        })
     );
   }
 

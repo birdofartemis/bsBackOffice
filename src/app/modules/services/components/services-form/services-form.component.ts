@@ -23,6 +23,7 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
   textHeader: string;
   buttonExitText: string;
   buttonConfirmText: string;
+  previewUrl: string;
 
   collaboratorList$!: Observable<Collaborator[]>;
   user$!: Observable<firebase.User | null>;
@@ -45,6 +46,7 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
     this.textHeader = 'Novo Serviço';
     this.buttonExitText = 'Voltar';
     this.buttonConfirmText = 'Adicionar Serviço';
+    this.previewUrl = '';
 
     this.serviceForm = this.fb.group({
       name: ['', Validators.required],
@@ -65,6 +67,9 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
           filter(({ id }) => !!id),
           switchMap(({ id }) => this.fs.getService(id)),
           tap((service: ServiceDoc) => {
+            if (service.data()!.url!) {
+              this.previewUrl = service.data()!.url!;
+            }
             //If it carries, it patch the form with the data of the service
             const values = service.data();
             this.serviceForm.patchValue(values || {});
@@ -114,6 +119,11 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
     if (service.documentId) {
       //success
       this.fs.updateServiceData(service);
+      if (this.serviceForm.get('url')!.value) {
+        if (this.serviceForm.get('url')!.value != this.previewUrl && this.previewUrl) {
+          this.storage.deletePhoto(this.previewUrl);
+        }
+      }
       this._snackBar.open('Atualizado com sucesso!', 'Fechar');
       this.router.navigate(['/home/services'], { relativeTo: this.route });
     } else {
@@ -126,6 +136,10 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     if (!this.isEdit && this.serviceForm.get('url')!.value) {
       this.storage.deletePhoto(this.serviceForm.get('url')!.value);
+    } else {
+      if (this.serviceForm.get('url')!.value && this.serviceForm.get('url')!.value != this.previewUrl) {
+        this.storage.deletePhoto(this.serviceForm.get('url')!.value);
+      }
     }
     this.router.navigate(['/home/services'], { relativeTo: this.route });
   }
@@ -139,7 +153,20 @@ export class ServicesFormComponent implements OnInit, OnDestroy {
   }
 
   photoInputChange(event: any): void {
-    if (event && this.serviceForm.get('url')!.value) {
+    if (this.serviceForm.get('url')!.value) {
+      this.storage.deletePhoto(this.serviceForm.get('url')!.value);
+      this.storage.uploadFile(event, UUID.UUID()).subscribe((res) => {
+        this.serviceForm.get('url')?.setValue(`gs://${res.ref.bucket}/${res.ref.fullPath}`);
+      });
+    } else {
+      this.storage.uploadFile(event, UUID.UUID()).subscribe((res) => {
+        this.serviceForm.get('url')?.setValue(`gs://${res.ref.bucket}/${res.ref.fullPath}`);
+      });
+    }
+  }
+
+  photoInputChangeEdit(event: any): void {
+    if (this.serviceForm.get('url')!.value && this.serviceForm.get('url')!.value != this.previewUrl) {
       this.storage.deletePhoto(this.serviceForm.get('url')!.value);
       this.storage.uploadFile(event, UUID.UUID()).subscribe((res) => {
         this.serviceForm.get('url')?.setValue(`gs://${res.ref.bucket}/${res.ref.fullPath}`);

@@ -15,12 +15,19 @@
             <mat-form-field appearance="fill">
               <mat-label>Nome do Cliente</mat-label>
               <input matInput type="text" required formControlName="client" />
-              <mat-error *ngIf="bookingForm?.get('client')?.errors?.required">Field is required</mat-error>
+              <mat-error *ngIf="bookingForm?.get('client')?.errors?.required">Campo necessário</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="example-form-field">
               <mat-label>Data do Agendamento</mat-label>
-              <input matInput [matDatepicker]="datepicker" [min]="minDate" required formControlName="date" />
+              <input
+                matInput
+                [matDatepicker]="datepicker"
+                [matDatepickerFilter]="dateFilter"
+                [min]="minDate"
+                required
+                formControlName="date"
+              />
               <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
               <mat-datepicker #datepicker>
                 <mat-datepicker-actions>
@@ -33,7 +40,7 @@
             <mat-form-field appearance="fill">
               <mat-label>Hora do Agendamento</mat-label>
               <input matInput type="time" required formControlName="hour" />
-              <mat-error *ngIf="bookingForm?.get('client')?.errors?.required">Field is required</mat-error>
+              <mat-error *ngIf="bookingForm?.get('client')?.errors?.required">Campo necessário</mat-error>
             </mat-form-field>
           </div>
 

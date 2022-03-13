@@ -39,9 +39,14 @@ export class FirestoreService {
       .set({ ...collaborator });
   }
 
-  triggerDeleteCollaboratorData(collaborator: Collaborator, userUID: string) {
+  triggerDeleteCollaboratorData(collaborator: Collaborator, userUID: string): Observable<string | undefined> {
     return this.getServices(userUID).pipe(
-      map((services) => services.map((service) => service.collaboratorIdList.find((id) => id === collaborator.citizenCard)))
+      map((services) => {
+        const list = services.reduce((acc, service) => [...acc, ...service.collaboratorIdList], [] as string[]);
+
+        return list.find((id) => id === collaborator.citizenCard);
+      })
+      //map((services) => services.map((service) => service.collaboratorIdList.find((id) => id === collaborator.citizenCard)))
     );
   }
 

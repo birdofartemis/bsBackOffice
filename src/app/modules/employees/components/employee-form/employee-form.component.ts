@@ -23,6 +23,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   textHeader: string;
   buttonExitText: string;
   buttonConfirmText: string;
+  previewUrl: string;
 
   @ViewChild('photoInput') photoInput!: ElementRef;
 
@@ -42,6 +43,7 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     this.textHeader = 'Novo Colaborador';
     this.buttonExitText = 'Voltar';
     this.buttonConfirmText = 'Adicionar Funcionário';
+    this.previewUrl = '';
 
     this.collaboratorForm = this.fb.group({
       name: ['', Validators.required],
@@ -64,6 +66,11 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
         .subscribe((collaborator) => {
           //If it carries, it patch the form with the data of the collaborator
           this.collaboratorForm.patchValue(collaborator.data()!);
+
+          if (collaborator.data()!.url!) {
+            this.previewUrl = collaborator.data()!.url!;
+          }
+
           this.isEdit = true;
 
           this.textHeader = 'Editar Colaborador';
@@ -110,6 +117,10 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   editCollaborator(event: Event, collaborator: Collaborator): void {
     event.stopPropagation();
     this.fs.updateCollaborator(collaborator);
+    const url = this.collaboratorForm.get('url')?.value;
+    if (!!url && url != this.previewUrl && this.previewUrl) {
+      this.storage.deletePhoto(this.previewUrl);
+    }
 
     this._snackBar.open('Atualizado com sucesso!', 'Fechar');
     //Redirects to employee component
@@ -120,6 +131,10 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     if (!this.isEdit && this.collaboratorForm.get('url')!.value) {
       this.storage.deletePhoto(this.collaboratorForm.get('url')!.value);
+    } else {
+      if (this.collaboratorForm.get('url')!.value && this.collaboratorForm.get('url')!.value != this.previewUrl) {
+        this.storage.deletePhoto(this.collaboratorForm.get('url')!.value);
+      }
     }
     this.router.navigate(['/home/employees'], { relativeTo: this.route });
   }
@@ -133,7 +148,20 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   }
 
   photoInputChange(event: any): void {
-    if (event && this.collaboratorForm.get('url')!.value) {
+    if (this.collaboratorForm.get('url')!.value) {
+      this.storage.deletePhoto(this.collaboratorForm.get('url')!.value);
+      this.storage.uploadFile(event, UUID.UUID()).subscribe((res) => {
+        this.collaboratorForm.get('url')?.setValue(`gs://${res.ref.bucket}/${res.ref.fullPath}`);
+      });
+    } else {
+      this.storage.uploadFile(event, UUID.UUID()).subscribe((res) => {
+        this.collaboratorForm.get('url')?.setValue(`gs://${res.ref.bucket}/${res.ref.fullPath}`);
+      });
+    }
+  }
+
+  photoInputChangeEdit(event: any): void {
+    if (this.collaboratorForm.get('url')!.value && this.collaboratorForm.get('url')!.value != this.previewUrl) {
       this.storage.deletePhoto(this.collaboratorForm.get('url')!.value);
       this.storage.uploadFile(event, UUID.UUID()).subscribe((res) => {
         this.collaboratorForm.get('url')?.setValue(`gs://${res.ref.bucket}/${res.ref.fullPath}`);

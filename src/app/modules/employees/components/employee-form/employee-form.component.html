@@ -19,19 +19,25 @@
             <ng-template #elseBlock>
               <img id="profileImage" src="../../../../../assets/no-user-image-icon-27.png" />
             </ng-template>
-            <input #photoInput hidden="true" type="file" (change)="photoInputChange($event)" accept=".png,.jpeg,.jpg,.giv,.svg" />
+            <input
+              #photoInput
+              hidden="true"
+              type="file"
+              (change)="isEdit ? photoInputChangeEdit($event): photoInputChange($event)"
+              accept=".png,.jpeg,.jpg,.giv,.svg"
+            />
           </div>
           <div class="form-collaborator-data">
             <mat-form-field>
               <mat-label>Nome Completo</mat-label>
               <input matInput type="text" required formControlName="name" />
-              <mat-error *ngIf="collaboratorForm?.get('name')?.errors?.required">Field is required</mat-error>
+              <mat-error *ngIf="collaboratorForm?.get('name')?.errors?.required">Campo necessário</mat-error>
             </mat-form-field>
 
             <mat-form-field>
               <mat-label>Telefone</mat-label>
               <input matInput type="text" required formControlName="phone" />
-              <mat-error *ngIf="collaboratorForm?.get('phone')?.errors?.required">Field is required</mat-error>
+              <mat-error *ngIf="collaboratorForm?.get('phone')?.errors?.required">Campo necessário</mat-error>
             </mat-form-field>
           </div>
 
@@ -39,7 +45,7 @@
             <mat-form-field>
               <mat-label>Email</mat-label>
               <input matInput type="email" required formControlName="email" />
-              <mat-error *ngIf="collaboratorForm?.get('email')?.errors?.required">Field is required</mat-error>
+              <mat-error *ngIf="collaboratorForm?.get('email')?.errors?.required">Campo necessário</mat-error>
             </mat-form-field>
           </div>
 
@@ -47,13 +53,13 @@
             <mat-form-field *ngIf="!isEdit">
               <mat-label>CC</mat-label>
               <input matInput type="text" required formControlName="citizenCard" />
-              <mat-error *ngIf="collaboratorForm?.get('citizenCard')?.errors?.required">Field is required</mat-error>
+              <mat-error *ngIf="collaboratorForm?.get('citizenCard')?.errors?.errorLenght">8 caracteres necessários</mat-error>
             </mat-form-field>
 
             <mat-form-field>
               <mat-label>NIF</mat-label>
               <input matInput type="text" required formControlName="taxIdNumber" />
-              <mat-error *ngIf="collaboratorForm?.get('taxIdNumber')?.errors?.required">Field is required</mat-error>
+              <mat-error *ngIf="collaboratorForm?.get('taxIdNumber')?.errors?.errorLenght">8 caracteres necessários</mat-error>
             </mat-form-field>
           </div>
         </form>

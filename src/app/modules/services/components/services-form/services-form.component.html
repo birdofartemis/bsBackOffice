@@ -17,22 +17,28 @@
               <app-photo [photoUrl]="serviceForm.get('url')?.value" photoWidth="10" photoHeight="10"> </app-photo>
             </div>
             <ng-template #elseBlock>
-              <img id="profileImage" src="../../../../../assets/no-user-image-icon-27.png" />
+              <img id="profileImage" src="../../../../../assets/defaultImage.png" />
             </ng-template>
-            <input #photoInput hidden="true" type="file" (change)="photoInputChange($event)" accept=".png,.jpeg,.jpg,.giv,.svg" />
+            <input
+              #photoInput
+              hidden="true"
+              type="file"
+              (change)="isEdit ? photoInputChangeEdit($event) : photoInputChange($event)"
+              accept=".png,.jpeg,.jpg,.giv,.svg"
+            />
           </div>
           <div class="form-collaborator-data">
             <mat-form-field>
               <mat-label>Serviço</mat-label>
               <input matInput type="text" required formControlName="name" />
-              <mat-error *ngIf="serviceForm?.get('name')?.errors?.required">Field is required</mat-error>
+              <mat-error *ngIf="serviceForm?.get('name')?.errors?.required">Campo necessário</mat-error>
             </mat-form-field>
 
             <mat-form-field>
               <mat-label>Preço</mat-label>
               <input matInput type="number" required formControlName="price" />
               <span matPrefix>€&nbsp;</span>
-              <mat-error *ngIf="serviceForm?.get('price')?.errors?.required">Field is required</mat-error>
+              <mat-error *ngIf="serviceForm?.get('price')?.errors?.required">Campo necessário</mat-error>
             </mat-form-field>
           </div>
           <div>

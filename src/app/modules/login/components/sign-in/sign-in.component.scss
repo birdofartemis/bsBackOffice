@@ -1,28 +1,44 @@
-.container {
-  .container-card {
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+
+  section {
     display: flex;
-    justify-content: space-around;
+    height: 80%;
+    width: 100%;
 
     mat-card {
       display: flex;
       flex-direction: column;
       border-radius: 25px;
-      height: auto;
+      width: 33%;
+      height: 90%;
+      mat-card-header {
+        display: flex;
+        justify-content: space-between;
+      }
 
       mat-card-title {
         margin-bottom: 2rem;
         margin-top: 1rem;
-        font-size: 1rem;
       }
       mat-card-content {
+        * {
+          font-size: 1em;
+        }
         margin-bottom: 2rem;
         .image {
           display: flex;
           justify-content: center;
           align-items: center;
+          height: 15rem;
           img {
-            width: 70%;
-            height: 70%;
+            width: 40%;
+            height: auto;
           }
         }
         h5 {
@@ -38,50 +54,38 @@
     .blue-card {
       background-color: #1f8db0;
       color: white;
-      width: 33.3%;
-      margin: 1.5rem;
+      margin: 1rem;
 
       mat-card-title {
-        text-align: center;
-        font-size: 1.5rem;
+        text-align: justify;
       }
       mat-card-content {
-        font-size: 1.1rem;
-        line-height: 1.6;
-
         ul {
           li {
             margin: 15px;
           }
         }
       }
-    }
-    button {
-      background-color: white;
-      color: #1f8db0;
-      border-radius: 15px;
-    }
-  }
 
-  .container-sub {
-    width: 33.3%;
-    .plan-header {
-      margin-top: 1rem;
-      height: 10%;
+      button {
+        background-color: white;
+        color: #1f8db0;
+        border-radius: 15px;
+      }
     }
+
     .white-card {
       background-color: rgba(196, 196, 196, 0.17);
       color: black;
-      height: 76%;
+      height: 95%;
+
       mat-card-title {
         text-align: center;
-        font-size: 1.5rem;
       }
       mat-card-content {
-        font-size: 1rem;
         ul {
           li {
-            margin: 15px;
+            margin: 1rem;
           }
         }
       }
@@ -91,22 +95,26 @@
       }
     }
   }
-}
 
-.card-header {
-  display: flex;
-  justify-content: space-between;
-}
-.footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  ul {
+  footer {
     display: flex;
+    justify-content: center;
+    align-items: center;
 
-    li {
-      margin: 15px;
+    ul {
+      display: flex;
+
+      li {
+        margin: 15px;
+        a {
+          text-decoration: none;
+          color: #000;
+        }
+
+        a:hover {
+          text-decoration: underline;
+        }
+      }
     }
   }
 }

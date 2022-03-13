@@ -13,63 +13,71 @@
             <app-photo [photoUrl]="signForm.get('url')?.value" photoWidth="10" photoHeight="10"> </app-photo>
           </div>
           <ng-template #elseBlock>
-            <img id="profileImage" src="../../../../../assets/no-user-image-icon-27.png" />
+            <img id="profileImage" src="../../../../../../assets/defaultImage.png" />
           </ng-template>
-          <input #photoInput hidden="true" type="file" (change)="photoInputChange($event)" accept=".png,.jpeg,.jpg,.giv,.svg" />
+          <input
+            #photoInput
+            hidden="true"
+            type="file"
+            (change)="isEdit ? photoInputChangeEdit($event) : photoInputChange($event)"
+            accept=".png,.jpeg,.jpg,.giv,.svg"
+          />
         </div>
         <form [formGroup]="signForm">
-          <div class="form-email" *ngIf="!isEdit">
-            <mat-form-field>
+          <div class="form-email">
+            <mat-form-field *ngIf="!isEdit">
               <mat-label>Email</mat-label>
               <input matInput type="email" required formControlName="email" />
-              <mat-error *ngIf="signForm?.get('email')?.errors?.required">Field is required</mat-error>
+              <mat-error *ngIf="signForm?.get('email')?.errors?.required">Campo necessário</mat-error>
             </mat-form-field>
-          </div>
 
-          <div class="form-name">
             <mat-form-field>
               <mat-label>Nome Completo</mat-label>
               <input matInput type="text" required formControlName="name" />
-              <mat-error *ngIf="signForm?.get('name')?.errors?.required">Field is required</mat-error>
+              <mat-error *ngIf="signForm?.get('name')?.errors?.required">Campo necessário</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Nome da Empresa</mat-label>
+              <input matInput type="text" required formControlName="enterpriseName" />
+              <mat-error *ngIf="signForm?.get('enterpriseName')?.errors?.required">Campo necessário</mat-error>
             </mat-form-field>
           </div>
 
           <div class="form-enterprise">
             <mat-form-field>
-              <mat-label>Nome da Empresa</mat-label>
-              <input matInput type="text" required formControlName="enterpriseName" />
-              <mat-error *ngIf="signForm?.get('enterpriseName')?.errors?.required">Field is required</mat-error>
-            </mat-form-field>
-          </div>
-
-          <div class="form-enterprise-data">
-            <mat-form-field>
               <mat-label>Telefone</mat-label>
-              <input matInput type="number" required formControlName="telephone" />
-              <mat-error *ngIf="signForm?.get('telephone')?.errors?.required">Field is required</mat-error>
+              <input matInput type="number" required formControlName="phoneNumber" />
+              <mat-error *ngIf="signForm?.get('phoneNumber')?.errors?.required">Campo necessário</mat-error>
             </mat-form-field>
 
             <mat-form-field>
               <mat-label>Código Postal</mat-label>
               <input matInput type="text" required formControlName="postalCode" />
-              <mat-error *ngIf="signForm?.get('postalCode')?.errors?.required">Field is required</mat-error>
+              <mat-error *ngIf="signForm?.get('postalCode')?.errors?.required">Campo necessário</mat-error>
             </mat-form-field>
+
+            <app-select-box
+              [rowsText]="weekDays"
+              [selectedValues]="signForm.get('daysOff')?.value"
+              (values)="getDaysOff($event)"
+            ></app-select-box>
           </div>
 
           <div class="form-password" *ngIf="!isEdit">
             <mat-form-field>
               <mat-label>Password</mat-label>
               <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required />
-              <mat-error>Must have min of 6 charac</mat-error>
+              <mat-error>Mínimo 6 caracteres </mat-error>
               <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                 <mat-icon> {{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
               </button>
             </mat-form-field>
 
             <mat-form-field>
-              <mat-label>Repeat Password</mat-label>
+              <mat-label>Repita a Password</mat-label>
               <input matInput formControlName="passwordConfirmation" [type]="hide ? 'password' : 'text'" required />
-              <mat-error>Must have min of 6 charac</mat-error>
+              <mat-error>Mínimo 6 caracteres ou passwords não coincidem</mat-error>
             </mat-form-field>
           </div>
           <div class="checkbox-terms-conditions">

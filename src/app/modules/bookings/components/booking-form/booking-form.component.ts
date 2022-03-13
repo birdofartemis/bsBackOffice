@@ -18,6 +18,7 @@ export class BookingFormComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   bookingForm: FormGroup;
   minDate: Date;
+  daysOff?: string[];
 
   //Observables
   collaboratorList$!: Observable<Collaborator[]>;
@@ -44,6 +45,9 @@ export class BookingFormComponent implements OnInit, OnDestroy {
     this.collaboratorList$ = this.user$.pipe(switchMap((user) => this.fs.getAvailableCollaborators(user!.uid)));
     this.filteredCollaboratorList$ = this.collaboratorList$;
     this.serviceList$ = this.user$.pipe(switchMap((user) => this.fs.getServices(user!.uid)));
+    this.user$.pipe(switchMap((user) => this.fs.getUserData(user!.uid))).subscribe((res) => {
+      this.daysOff = res.data()!.daysOff;
+    });
   }
 
   filterCollaboratorList(event: EventListener): void {
@@ -58,6 +62,12 @@ export class BookingFormComponent implements OnInit, OnDestroy {
       this.filteredCollaboratorList$ = this.collaboratorList$;
     }
   }
+
+  dateFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+
+    return day.toString() != this.daysOff?.find((x) => x == day.toString());
+  };
 
   addBooking(event: Event, formValue: Booking, user: firebase.User | null): void {
     event.stopPropagation();

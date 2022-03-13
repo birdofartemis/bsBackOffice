@@ -1,0 +1,6 @@
+<mat-form-field>
+  <mat-label>Folgas</mat-label>
+  <mat-select [formControl]="selectControl" multiple [(value)]="selectedValues" (closed)="getWeekDays()">
+    <mat-option *ngFor="let rowText of rowsText; index as rowValue" value="{{rowValue}}">{{rowText}}</mat-option>
+  </mat-select>
+</mat-form-field>

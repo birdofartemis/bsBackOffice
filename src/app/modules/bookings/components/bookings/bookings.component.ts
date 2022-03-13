@@ -15,6 +15,7 @@ import { DeleteWarningComponent } from 'src/app/shared/components/delete-warning
 import { Booking } from 'src/app/shared/model/booking.model';
 import { Collaborator } from 'src/app/shared/model/collaborator.model';
 import { Service } from 'src/app/shared/model/service.model';
+import { User } from 'src/app/shared/model/user.model';
 
 @Component({
   selector: 'app-bookings',
@@ -28,6 +29,7 @@ export class BookingsComponent implements OnInit, OnDestroy {
   //Observables
   bookingList!: MatTableDataSource<Booking>;
   bookingListFiltered!: MatTableDataSource<Booking>;
+  daysOff?: string[];
   collaboratorList$!: Observable<Collaborator[]>;
   serviceList$!: Observable<Service[]>;
   user$!: Observable<firebase.User | null>;
@@ -56,8 +58,12 @@ export class BookingsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.user$ = this.auth.getUserUID();
     //Not loaded data (streams)
+    this;
     this.collaboratorList$ = this.user$.pipe(switchMap((user) => this.fs.getCollaborators(user!.uid)));
     this.serviceList$ = this.user$.pipe(switchMap((user) => this.fs.getServices(user!.uid)));
+    this.user$.pipe(switchMap((user) => this.fs.getUserData(user!.uid))).subscribe((res) => {
+      this.daysOff = res.data()!.daysOff;
+    });
 
     //Process booking list data using uid of salon and implementing sort and paginator
     this.subscription.add(
@@ -87,7 +93,8 @@ export class BookingsComponent implements OnInit, OnDestroy {
 
   dateFilter = (d: Date | null): boolean => {
     const day = (d || new Date()).getDay();
-    return day !== 2;
+
+    return day.toString() != this.daysOff?.find((x) => x == day.toString());
   };
 
   //Redirect to service-form component
@@ -141,9 +148,9 @@ export class BookingsComponent implements OnInit, OnDestroy {
   //This function is called on html and return the profits of a day
   getTotalCost(services: Service[] | null | undefined): number | null {
     return (
-      this.bookingListFiltered.data
-        .map((booking) => services!.find((service) => service.documentId === booking.serviceId)!.price)
-        .reduce((acc, value) => acc + value, 0) || 0
+      this.bookingListFiltered?.data
+        .map((booking) => services?.find((service) => service.documentId === booking.serviceId)?.price)
+        .reduce((acc, value) => acc! + value!, 0) || 0
     );
   }
   //This function is called after the component is destroyed

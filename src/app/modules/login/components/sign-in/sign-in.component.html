@@ -1,11 +1,7 @@
-<div class="container">
-  <div class="container-card">
+<main>
+  <section>
     <mat-card class="blue-card">
-      <mat-card-title
-        >Consiga gerir melhor <br />
-        <br />
-        o seu tempo agora.</mat-card-title
-      >
+      <mat-card-title>Consiga gerir melhor <b>o seu tempo agora</b> .</mat-card-title>
       <mat-card-content>
         <p>
           Ajude o seu salão ou barbearia a gerir melhor <br />
@@ -17,53 +13,39 @@
           experiência grátis e com o total apoio da <br />
           nossa equipa de desenvolvimento.
         </p>
-        <br />
-        <br />
         <div class="image">
           <img mat-card-image src="../../../assets/Logo.jpg" alt="Logo" />
         </div>
       </mat-card-content>
     </mat-card>
 
-    <div class="container-sub">
-      <div class="plan-header">
-        <h1>Escolha o seu plano <br />agora.</h1>
-      </div>
+    <mat-card class="white-card">
+      <mat-card-header>
+        <mat-card-title>Plano - 6 meses</mat-card-title>
+        <h1>15€ /mês</h1>
+      </mat-card-header>
+      <mat-card-content>
+        <h4>Plano inclui:</h4>
+        <ul>
+          <li>Ver agendamentos marcados através do website feitos na aplicação móvel pelos clientes.</li>
+          <li>Adicionar funcionários à lista de funcionários disponíveis para marcação.</li>
+          <li>Adicionar serviços prestados pelo seu salão ou barbearia.</li>
+          <li>Editar horários de disponibilidade de cada funcionário.</li>
+        </ul>
 
-      <mat-card class="white-card">
-        <div class="card-header">
-          <mat-card-title>Plano - 6 meses</mat-card-title>
-          <h1>
-            15€ <br />
-            <h5>mensal</h5>
-          </h1>
-        </div>
-        <mat-card-content>
-          <h4>Plano inclui:</h4>
-          <ul>
-            <li>Ver agendamentos marcados através do website feitos na aplicação móvel pelos clientes.</li>
-            <li>Adicionar funcionários à lista de funcionários disponíveis para marcação.</li>
-            <li>Adicionar serviços prestados pelo seu salão ou barbearia.</li>
-            <li>Editar horários de disponibilidade de cada funcionário.</li>
-          </ul>
+        <h5>Ver todas as funcionalidades</h5>
+      </mat-card-content>
 
-          <h5>Ver todas as funcionalidades</h5>
-        </mat-card-content>
-
-        <mat-card-actions>
-          <button mat-button routerLink="/signin/account" routerLinkActive="active">Comece já</button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
+      <mat-card-actions>
+        <button mat-button routerLink="/signin/account" routerLinkActive="active">Comece já</button>
+      </mat-card-actions>
+    </mat-card>
 
     <mat-card class="blue-card">
-      <div class="card-header">
+      <mat-card-header>
         <mat-card-title>Plano - 12 meses</mat-card-title>
-        <h1>
-          10€ <br />
-          <h5>mensal</h5>
-        </h1>
-      </div>
+        <h1>10€ /mês</h1>
+      </mat-card-header>
       <mat-card-content>
         <h4>Plano inclui:</h4>
         <ul>
@@ -79,13 +61,12 @@
         <button mat-button routerLink="/signin/account" routerLinkActive="active">Comece já</button>
       </mat-card-actions>
     </mat-card>
-  </div>
-
-  <div class="footer">
+  </section>
+  <footer>
     <ul>
-      <li>Term of Use</li>
-      <li>Help</li>
-      <li>Privacy Policy</li>
+      <li><a href="url">Term of Use</a></li>
+      <li><a href="url">Help</a></li>
+      <li><a href="url">Privacy Policy</a></li>
     </ul>
-  </div>
-</div>
+  </footer>
+</main>

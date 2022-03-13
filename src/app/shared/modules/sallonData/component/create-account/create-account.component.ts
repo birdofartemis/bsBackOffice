@@ -21,6 +21,8 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
   signForm: FormGroup;
   hide: boolean;
   isEdit: boolean;
+  previewUrl: string;
+  weekDays: string[];
 
   @ViewChild('photoInput') photoInput!: ElementRef;
   constructor(
@@ -35,7 +37,9 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
   ) {
     this.hide = true;
     this.isEdit = false;
+    this.previewUrl = '';
     this.subscription = new Subscription();
+    this.weekDays = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
 
     this.signForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -43,13 +47,17 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
       passwordConfirmation: ['', [Validators.required, this.validatePassword()]],
       enterpriseName: ['', Validators.required],
       postalCode: ['', Validators.required],
-      telephone: ['', Validators.required],
+      phoneNumber: ['', Validators.required],
+      daysOff: [''],
       name: ['', Validators.required],
       termsConditions: ['', [Validators.required, Validators.requiredTrue]],
       url: ['']
     });
   }
 
+  getDaysOff(event: Event) {
+    this.signForm.get('daysOff')?.setValue(event);
+  }
   ngOnInit(): void {
     this.subscription.add(
       this.route.params
@@ -59,7 +67,12 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
           tap((user: UserDoc) => {
             //if the url contains the id of salon it will patch the form
             const values = user.data();
+
             this.signForm.patchValue(values || {});
+
+            if (values!.url!) {
+              this.previewUrl = values!.url!;
+            }
 
             this.isEdit = true;
 
@@ -111,8 +124,13 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
       if (userLogged?.uid) {
         //Update user data and redirects to home page
         this.fs.updateUserData(user, userLogged!.uid);
+        if (this.signForm.get('url')!.value) {
+          if (this.signForm.get('url')!.value != this.previewUrl && this.previewUrl) {
+            this.storage.deletePhoto(this.previewUrl);
+          }
+        }
         this._snackBar.open('Alterações executadas com sucesso', 'Fechar');
-        this.router.navigate(['/home'], { relativeTo: this.route });
+        this.router.navigate(['/home/config'], { relativeTo: this.route });
       } else {
         //Redirects to login Page
         this._snackBar.open('Conta não reconhecida', 'Fechar');
@@ -131,10 +149,20 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
 
   onCancelButton(event: Event) {
     event.stopPropagation();
-    if (!this.isEdit && this.signForm.get('url')!.value) {
-      this.storage.deletePhoto(this.signForm.get('url')!.value);
-      this.router.navigate(['/signin'], { relativeTo: this.route });
+    if (!this.isEdit) {
+      if (this.signForm.get('url')!.value) {
+        this.storage.deletePhoto(this.signForm.get('url')!.value);
+      } else {
+        if (this.signForm.get('url')!.value && this.signForm.get('url')!.value != this.previewUrl) {
+          this.storage.deletePhoto(this.signForm.get('url')!.value);
+        }
+      }
+      this.router.navigate(['/'], { relativeTo: this.route });
     } else {
+      if (this.signForm.get('url')!.value && this.signForm.get('url')!.value != this.previewUrl) {
+        this.storage.deletePhoto(this.signForm.get('url')!.value);
+      }
+
       this.router.navigate(['/home/config'], { relativeTo: this.route });
     }
   }
@@ -148,7 +176,20 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
   }
 
   photoInputChange(event: any): void {
-    if (event && this.signForm.get('url')!.value) {
+    if (this.signForm.get('url')!.value) {
+      this.storage.deletePhoto(this.signForm.get('url')!.value);
+      this.storage.uploadFile(event, UUID.UUID()).subscribe((res) => {
+        this.signForm.get('url')?.setValue(`gs://${res.ref.bucket}/${res.ref.fullPath}`);
+      });
+    } else {
+      this.storage.uploadFile(event, UUID.UUID()).subscribe((res) => {
+        this.signForm.get('url')?.setValue(`gs://${res.ref.bucket}/${res.ref.fullPath}`);
+      });
+    }
+  }
+
+  photoInputChangeEdit(event: any): void {
+    if (this.signForm.get('url')!.value && this.signForm.get('url')!.value != this.previewUrl) {
       this.storage.deletePhoto(this.signForm.get('url')!.value);
       this.storage.uploadFile(event, UUID.UUID()).subscribe((res) => {
         this.signForm.get('url')?.setValue(`gs://${res.ref.bucket}/${res.ref.fullPath}`);

@@ -5,9 +5,10 @@
 
 .left-container {
   width: 50%;
-  height: auto;
+  height: 100%;
   display: flex;
-  background-color: #2196f3;
+  background-image: url('../../../../../../assets/Login-Background.jpg');
+
   justify-content: center;
   align-items: center;
   color: #fff;
@@ -17,10 +18,13 @@
 }
 
 .right-container {
+  button {
+    margin-right: 1rem;
+  }
   width: 50%;
   height: 100%;
   mat-card {
-    height: auto;
+    height: 100%;
     mat-form-field {
       margin: 0.7rem;
     }
